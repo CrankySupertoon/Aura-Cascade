@@ -22,116 +22,117 @@ import java.util.Random;
  * Created by localmacaccount on 2/14/15.
  */
 public class EnchanterTile extends ConsumerTile {
-    @Override
-    public int getMaxProgress() {
-        return 1000;
-    }
-
-    @Override
-    public int getPowerPerProgress() {
-        return 500;
-    }
-
-    @Override
-    public boolean validItemsNearby() {
-        ArrayList<EntityItem> items = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
-        for (EntityItem item : items) {
-            ItemStack toolStack = item.getEntityItem();
-            if (EnumEnchantmentType.DIGGER.canEnchantItem(toolStack.getItem()) || EnumEnchantmentType.WEAPON.canEnchantItem(toolStack.getItem())) {
-
-                ArrayList<EntityItem> nextItems = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
-                for (EntityItem ingot : nextItems) {
-                    if (ingot.getEntityItem().getItem() instanceof ItemMaterial && ((ItemMaterial) ingot.getEntityItem().getItem()).materialIndex == 0) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    @SuppressWarnings("unchecked")
 	@Override
-    public void onUsePower() {
-       // AuraCascade.analytics.eventDesign("consumerEnchant", AuraUtil.formatLocation(this));
-        ArrayList<EntityItem> items = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
-        for (EntityItem item : items) {
-            ItemStack toolStack = item.getEntityItem();
-            if (EnumEnchantmentType.DIGGER.canEnchantItem(toolStack.getItem()) || EnumEnchantmentType.WEAPON.canEnchantItem(toolStack.getItem())) {
+	public int getMaxProgress() {
+		return 1000;
+	}
 
-                ArrayList<EntityItem> nextItems = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
-                for (EntityItem ingot : nextItems) {
-                    if (ingot.getEntityItem().getItem() instanceof ItemMaterial && ((ItemMaterial) ingot.getEntityItem().getItem()).materialIndex == 0) {
-                        ItemStack ingotStack = ingot.getEntityItem();
-                        EnumRainbowColor aura = ((ItemMaterial) ingotStack.getItem()).color;
-                        Enchantment enchant = getEnchantFromAura(aura);
-                        if (enchant != null) {
-                            int level = EnchantmentHelper.getEnchantmentLevel(enchant, toolStack);
-                            if (isSuccessful(toolStack)) {
-                                @SuppressWarnings("rawtypes")
+	@Override
+	public int getPowerPerProgress() {
+		return 500;
+	}
+
+	@Override
+	public boolean validItemsNearby() {
+		ArrayList<EntityItem> items = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
+		for (EntityItem item : items) {
+			ItemStack toolStack = item.getEntityItem();
+			if (EnumEnchantmentType.DIGGER.canEnchantItem(toolStack.getItem()) || EnumEnchantmentType.WEAPON.canEnchantItem(toolStack.getItem())) {
+
+				ArrayList<EntityItem> nextItems = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
+				for (EntityItem ingot : nextItems) {
+					if (ingot.getEntityItem().getItem() instanceof ItemMaterial && ((ItemMaterial) ingot.getEntityItem().getItem()).materialIndex == 0) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onUsePower() {
+		// AuraCascade.analytics.eventDesign("consumerEnchant", AuraUtil.formatLocation(this));
+		ArrayList<EntityItem> items = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
+		for (EntityItem item : items) {
+			ItemStack toolStack = item.getEntityItem();
+			if (EnumEnchantmentType.DIGGER.canEnchantItem(toolStack.getItem()) || EnumEnchantmentType.WEAPON.canEnchantItem(toolStack.getItem())) {
+
+				ArrayList<EntityItem> nextItems = (ArrayList<EntityItem>) world.getEntitiesWithinAABB(EntityItem.class, PosUtil.getBoundingBox(getPos(), 3));
+				for (EntityItem ingot : nextItems) {
+					if (ingot.getEntityItem().getItem() instanceof ItemMaterial && ((ItemMaterial) ingot.getEntityItem().getItem()).materialIndex == 0) {
+						ItemStack ingotStack = ingot.getEntityItem();
+						EnumRainbowColor aura = ((ItemMaterial) ingotStack.getItem()).color;
+						Enchantment enchant = getEnchantFromAura(aura);
+						if (enchant != null) {
+							int level = EnchantmentHelper.getEnchantmentLevel(enchant, toolStack);
+							if (isSuccessful(toolStack)) {
+								@SuppressWarnings("rawtypes")
 								Map enchantMap = EnchantmentHelper.getEnchantments(toolStack);
-                                enchantMap.put(Enchantment.getEnchantmentID(enchant), level + 1);
-                                EnchantmentHelper.setEnchantments(enchantMap, toolStack);
-                            }
-                            ingotStack.shrink(1);
-                            AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(1, item.posX, item.posY, item.posZ), new NetworkRegistry.TargetPoint(world.provider.getDimension(), getPos().getX(), getPos().getY(), getPos().getZ(), 32));
+								enchantMap.put(Enchantment.getEnchantmentID(enchant), level + 1);
+								EnchantmentHelper.setEnchantments(enchantMap, toolStack);
+							}
+							ingotStack.shrink(1);
+							AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(1, item.posX, item.posY, item.posZ), new NetworkRegistry.TargetPoint(world.provider.getDimension(), getPos().getX(), getPos().getY(), getPos().getZ(), 32));
 
-                            if (ingotStack.getCount() <= 0) {
-                                ingot.setDead();
-                            }
-                            return;
-                        }
-                    }
+							if (ingotStack.getCount() <= 0) {
+								ingot.setDead();
+							}
+							return;
+						}
+					}
 
-                }
-            }
-        }
-    }
+				}
+			}
+		}
+	}
 
-    public int getTotalLevel(ItemStack stack) {
-    	//TODO Enchant System, fix.
-        return EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.red, stack)
-                + EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.orange, stack)
-                + EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.yellow, stack)
-                + EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.green, stack)
-                + EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.blue, stack)
-                + EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.purple, stack);
-    }
+	public int getTotalLevel(ItemStack stack) {
+		//TODO Enchant System, fix.
+		return EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.red, stack)
+				+ EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.orange, stack)
+				+ EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.yellow, stack)
+				+ EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.green, stack)
+				+ EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.blue, stack)
+				+ EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.purple, stack);
+	}
 
-    public int getMaxLevel(ItemStack stack) {
-        return NumberUtils.max(new int[]{EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.red, stack)
-                , EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.orange, stack)
-                , EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.yellow, stack)
-                , EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.green, stack)
-                , EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.blue, stack)
-                , EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.purple, stack)});
-    }
-    public double getSuccessRate(ItemStack stack) {
-        int totalLevel = getTotalLevel(stack);
-        return Math.pow(.75, totalLevel) * Math.pow(.25, Math.max(0, getMaxLevel(stack) - 4));
-    }
+	public int getMaxLevel(ItemStack stack) {
+		return NumberUtils.max(new int[]{EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.red, stack)
+				, EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.orange, stack)
+				, EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.yellow, stack)
+				, EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.green, stack)
+				, EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.blue, stack)
+				, EnchantmentHelper.getEnchantmentLevel(EnchantmentManager.purple, stack)});
+	}
 
-    public boolean isSuccessful(ItemStack stack) {
-        return new Random().nextDouble() < getSuccessRate(stack);
+	public double getSuccessRate(ItemStack stack) {
+		int totalLevel = getTotalLevel(stack);
+		return Math.pow(.75, totalLevel) * Math.pow(.25, Math.max(0, getMaxLevel(stack) - 4));
+	}
 
-    }
+	public boolean isSuccessful(ItemStack stack) {
+		return new Random().nextDouble() < getSuccessRate(stack);
 
-    @SuppressWarnings("incomplete-switch")
+	}
+
+	@SuppressWarnings("incomplete-switch")
 	public Enchantment getEnchantFromAura(EnumRainbowColor aura) {
-        switch (aura) {
-            case RED:
-                return EnchantmentManager.red;
-            case ORANGE:
-                return EnchantmentManager.orange;
-            case YELLOW:
-                return EnchantmentManager.yellow;
-            case BLUE:
-                return EnchantmentManager.blue;
-            case GREEN:
-                return EnchantmentManager.green;
-            case VIOLET:
-                return EnchantmentManager.purple;
-        }
-        return null;
-    }
+		switch (aura) {
+			case RED:
+				return EnchantmentManager.red;
+			case ORANGE:
+				return EnchantmentManager.orange;
+			case YELLOW:
+				return EnchantmentManager.yellow;
+			case BLUE:
+				return EnchantmentManager.blue;
+			case GREEN:
+				return EnchantmentManager.green;
+			case VIOLET:
+				return EnchantmentManager.purple;
+		}
+		return null;
+	}
 }

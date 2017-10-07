@@ -18,128 +18,128 @@ import java.util.Random;
  */
 public class EntityFairy extends Entity {
 
-    public EntityPlayer player;
+	public EntityPlayer player;
 
-    public double theta;
-    public double dTheta;
+	public double theta;
+	public double dTheta;
 
-    public double phi;
-    public double dPhi;
-    public double maxPhi;
+	public double phi;
+	public double dPhi;
+	public double maxPhi;
 
-    public double rho;
+	public double rho;
 
-    public boolean reverseTheta;
-    public boolean reversePhi;
+	public boolean reverseTheta;
+	public boolean reversePhi;
 
-    public EntityItem entityItemRender;
-
-
-    public EntityFairy(World p_i1582_1_) {
-        super(p_i1582_1_);
-        entityItemRender = new EntityItem(world);
-    }
-
-    @Override
-    public boolean canRenderOnFire() {
-        return false;
-    }
-
-    @Override
-    protected void entityInit() {
-        Random random = new Random(this.getPersistentID().hashCode());
-        rho = random.nextDouble() + 5;
-        phi = random.nextDouble() * 180;
-        theta = random.nextDouble() * 360;
-
-        //Period of 5-10 s
-        dTheta = 1 / (random.nextDouble() * 5 + 5) + .1;
-        //Period of 3-5 s
-        dPhi = .3 / (3 + random.nextDouble());
+	public EntityItem entityItemRender;
 
 
-    }
+	public EntityFairy(World p_i1582_1_) {
+		super(p_i1582_1_);
+		entityItemRender = new EntityItem(world);
+	}
 
-    public double getEffectiveRho() {
-        return rho;
-    }
+	@Override
+	public boolean canRenderOnFire() {
+		return false;
+	}
 
-    public Entity getOrbitingEntity() {
-        return player;
-    }
+	@Override
+	protected void entityInit() {
+		Random random = new Random(this.getPersistentID().hashCode());
+		rho = random.nextDouble() + 5;
+		phi = random.nextDouble() * 180;
+		theta = random.nextDouble() * 360;
+
+		//Period of 5-10 s
+		dTheta = 1 / (random.nextDouble() * 5 + 5) + .1;
+		//Period of 3-5 s
+		dPhi = .3 / (3 + random.nextDouble());
 
 
-    @Override
-    public void onUpdate() {
-        super.onUpdate();
-        if (player != null) {
-            if (player.isDead) {
-                setDead();
-            }
+	}
 
-            extinguish();
-            phi += (dPhi / 2);
-            theta += (dTheta / 2);
+	public double getEffectiveRho() {
+		return rho;
+	}
 
-            phi %= 360;
-            theta %= 360;
-            if (!world.isRemote && world.getTotalWorldTime() % 1000 == 0) {
-                ((WorldServer) world).getEntityTracker().sendToTracking(this, AuraCascade.proxy.networkWrapper.getPacketFrom(new PacketFairyUpdate(this)));
-            }
+	public Entity getOrbitingEntity() {
+		return player;
+	}
 
-            double oldX = posX;
-            double oldY = posY;
-            double oldZ = posZ;
-            Entity entity = getOrbitingEntity();
-            setPosition(entity.posX + getEffectiveRho() * Math.sin(phi) * Math.cos(theta), entity.posY + getEffectiveRho() * Math.sin(phi) * Math.sin(theta), player.posZ + getEffectiveRho() * Math.cos(phi));
 
-            if (entityItemRender == null) {
-                entityItemRender = new EntityItem(world);
-            }
-            entityItemRender.setPosition(posX, posY, posZ);
-            entityItemRender.motionX = oldX;
-            entityItemRender.motionY = oldY;
-            entityItemRender.motionZ = oldZ;
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (player != null) {
+			if (player.isDead) {
+				setDead();
+			}
 
-            motionX = 0;
-            motionY = 0;
-            motionZ = 0;
+			extinguish();
+			phi += (dPhi / 2);
+			theta += (dTheta / 2);
 
-        } else if (world.isRemote) {
-            AuraCascade.proxy.networkWrapper.sendToServer(new PacketFairyRequestUpdate(this));
-        } else {
-            setDead();
-        }
-    }
+			phi %= 360;
+			theta %= 360;
+			if (!world.isRemote && world.getTotalWorldTime() % 1000 == 0) {
+				((WorldServer) world).getEntityTracker().sendToTracking(this, AuraCascade.proxy.networkWrapper.getPacketFrom(new PacketFairyUpdate(this)));
+			}
 
-    @Override
-    public AxisAlignedBB getEntityBoundingBox() {
-        return new AxisAlignedBB(posX, posY, posZ, posX + 0.2, posY + 0.2, posZ + 0.2);
-    }
+			double oldX = posX;
+			double oldY = posY;
+			double oldZ = posZ;
+			Entity entity = getOrbitingEntity();
+			setPosition(entity.posX + getEffectiveRho() * Math.sin(phi) * Math.cos(theta), entity.posY + getEffectiveRho() * Math.sin(phi) * Math.sin(theta), player.posZ + getEffectiveRho() * Math.cos(phi));
 
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound nbt) {
-        phi = nbt.getDouble("phi");
-        dPhi = nbt.getDouble("dPhi");
-        maxPhi = nbt.getDouble("maxPhi");
-        dTheta = nbt.getDouble("dTheta");
-        theta = nbt.getDouble("theta");
-        rho = nbt.getDouble("rho");
-        reversePhi = nbt.getBoolean("reversePhi");
-        reverseTheta = nbt.getBoolean("reverseTheta");
-    }
+			if (entityItemRender == null) {
+				entityItemRender = new EntityItem(world);
+			}
+			entityItemRender.setPosition(posX, posY, posZ);
+			entityItemRender.motionX = oldX;
+			entityItemRender.motionY = oldY;
+			entityItemRender.motionZ = oldZ;
 
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound nbt) {
-        nbt.setDouble("phi", phi);
-        nbt.setDouble("dPhi", dPhi);
-        nbt.setDouble("dTheta", dTheta);
-        nbt.setDouble("theta", theta);
-        nbt.setDouble("maxPhi", maxPhi);
-        nbt.setDouble("rho", rho);
-        nbt.setBoolean("reverseTheta", reverseTheta);
-        nbt.setBoolean("reversePhi", reversePhi);
-    }
+			motionX = 0;
+			motionY = 0;
+			motionZ = 0;
+
+		} else if (world.isRemote) {
+			AuraCascade.proxy.networkWrapper.sendToServer(new PacketFairyRequestUpdate(this));
+		} else {
+			setDead();
+		}
+	}
+
+	@Override
+	public AxisAlignedBB getEntityBoundingBox() {
+		return new AxisAlignedBB(posX, posY, posZ, posX + 0.2, posY + 0.2, posZ + 0.2);
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
+		phi = nbt.getDouble("phi");
+		dPhi = nbt.getDouble("dPhi");
+		maxPhi = nbt.getDouble("maxPhi");
+		dTheta = nbt.getDouble("dTheta");
+		theta = nbt.getDouble("theta");
+		rho = nbt.getDouble("rho");
+		reversePhi = nbt.getBoolean("reversePhi");
+		reverseTheta = nbt.getBoolean("reverseTheta");
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setDouble("phi", phi);
+		nbt.setDouble("dPhi", dPhi);
+		nbt.setDouble("dTheta", dTheta);
+		nbt.setDouble("theta", theta);
+		nbt.setDouble("maxPhi", maxPhi);
+		nbt.setDouble("rho", rho);
+		nbt.setBoolean("reverseTheta", reverseTheta);
+		nbt.setBoolean("reversePhi", reversePhi);
+	}
 
 
 }

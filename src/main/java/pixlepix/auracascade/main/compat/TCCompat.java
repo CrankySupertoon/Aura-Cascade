@@ -12,13 +12,13 @@ import pixlepix.auracascade.registry.BlockRegistry;
  */
 public class TCCompat {
 
-    public static void postInit() {
-        for (Block b : BlockRegistry.getBlockFromClass(AuraBlock.class)) {
-            FMLInterModComms.sendMessage("thaumcraft", "portableHoleBlacklist", ForgeRegistries.BLOCKS.getKey(b).toString());
-        }
+	public static void postInit() {
+		for (Block b : BlockRegistry.getBlockFromClass(AuraBlock.class)) {
+			FMLInterModComms.sendMessage("thaumcraft", "portableHoleBlacklist", ForgeRegistries.BLOCKS.getKey(b).toString());
+		}
 
-        for (Block b : BlockRegistry.getBlockFromClass(AuraBlockCapacitor.class)) {
-            FMLInterModComms.sendMessage("thaumcraft", "portableHoleBlacklist", ForgeRegistries.BLOCKS.getKey(b).toString());
-        }
-    }
+		for (Block b : BlockRegistry.getBlockFromClass(AuraBlockCapacitor.class)) {
+			FMLInterModComms.sendMessage("thaumcraft", "portableHoleBlacklist", ForgeRegistries.BLOCKS.getKey(b).toString());
+		}
+	}
 }

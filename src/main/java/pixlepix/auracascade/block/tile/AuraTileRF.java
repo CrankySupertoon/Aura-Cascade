@@ -11,34 +11,34 @@ import java.util.HashSet;
  */
 public class AuraTileRF extends AuraTile {
 
-    public ArrayList<BlockPos> foundTiles = new ArrayList<BlockPos>();
+	public ArrayList<BlockPos> foundTiles = new ArrayList<BlockPos>();
 
-    public HashSet<BlockPos> particleTiles = new HashSet<BlockPos>();
+	public HashSet<BlockPos> particleTiles = new HashSet<BlockPos>();
 
-    public int lastPower = 0;
-    public boolean disabled = false;
-    public String[] blacklist = new String[]{"InductionPort", "EnergyCube", "ChargePad", "EnergyStorage", "TileEntityMagnetic", "TileTransceiver", "TileEntityRift", "TileTransvectorInterface", "TileRemoteInterface", "TileEntityEnergyDistributor", "TileEntityEnderEnergyDistributor", "TileCharger", "TileCell", "TileEntityTransferNodeEnergy", "TileEnergyInfuser"};
-    public String[] whitelist = new String[]{"tileentityenderthermiclavapump", "tileentityenderquarry"};
-    public String[] blacklistModId = new String[]{"quantumflux"};
-    public String[] whitelistModId = new String[]{"buildcraft", "GalacticraftCore", "progressiveautomation", "Mekanism"};
+	public int lastPower = 0;
+	public boolean disabled = false;
+	public String[] blacklist = new String[]{"InductionPort", "EnergyCube", "ChargePad", "EnergyStorage", "TileEntityMagnetic", "TileTransceiver", "TileEntityRift", "TileTransvectorInterface", "TileRemoteInterface", "TileEntityEnergyDistributor", "TileEntityEnderEnergyDistributor", "TileCharger", "TileCell", "TileEntityTransferNodeEnergy", "TileEnergyInfuser"};
+	public String[] whitelist = new String[]{"tileentityenderthermiclavapump", "tileentityenderquarry"};
+	public String[] blacklistModId = new String[]{"quantumflux"};
+	public String[] whitelistModId = new String[]{"buildcraft", "GalacticraftCore", "progressiveautomation", "Mekanism"};
 
-    @Override
-    protected void readCustomNBT(NBTTagCompound nbt) {
-        super.readCustomNBT(nbt);
-        lastPower = nbt.getInteger("lastPower");
-    }
+	@Override
+	protected void readCustomNBT(NBTTagCompound nbt) {
+		super.readCustomNBT(nbt);
+		lastPower = nbt.getInteger("lastPower");
+	}
 
-    @Override
-    protected void writeCustomNBT(NBTTagCompound nbt) {
-        super.writeCustomNBT(nbt);
-        nbt.setInteger("lastPower", lastPower);
-    }
+	@Override
+	protected void writeCustomNBT(NBTTagCompound nbt) {
+		super.writeCustomNBT(nbt);
+		nbt.setInteger("lastPower", lastPower);
+	}
 
-    @Override
-    public void update() {
-        super.update();
-        //TODO Reimplement RF tile
-        /*
+	@Override
+	public void update() {
+		super.update();
+		//TODO Reimplement RF tile
+		/*
         if (world.getTotalWorldTime() % 40 == 0) {
             foundTiles.clear();
             LinkedList<BlockPos> nextTiles = new LinkedList<BlockPos>();
@@ -161,10 +161,10 @@ public class AuraTileRF extends AuraTile {
         }
 	*/
 
-    }
+	}
 
-    @Override
-    public void receivePower(int power) {
-        lastPower += power;
-    }
+	@Override
+	public void receivePower(int power) {
+		lastPower += power;
+	}
 }

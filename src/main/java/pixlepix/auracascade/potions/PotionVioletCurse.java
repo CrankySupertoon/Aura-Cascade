@@ -18,35 +18,35 @@ import java.util.Random;
  */
 public class PotionVioletCurse extends Potion {
 
-    public PotionVioletCurse() {
-        super(true, EnumRainbowColor.VIOLET.color.getHex());
-        setPotionName("Violet Curse");
-    }
+	public PotionVioletCurse() {
+		super(true, EnumRainbowColor.VIOLET.color.getHex());
+		setPotionName("Violet Curse");
+	}
 
-    @Override
-    public boolean isReady(int p_76397_1_, int p_76397_2_) {
-        return new Random().nextInt(60) == 0;
-    }
+	@Override
+	public boolean isReady(int p_76397_1_, int p_76397_2_) {
+		return new Random().nextInt(60) == 0;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
-        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.VIOLET), x + 8, y + 8);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
+		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.VIOLET), x + 8, y + 8);
+	}
 
-    @Override
-    public void performEffect(EntityLivingBase entity, int amplifier) {
-        List<EntityLivingBase> entities = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(entity.posX - 15, entity.posY - 15, entity.posZ - 15, entity.posX + 15, entity.posY + 15, entity.posZ + 15));
-        EntityLivingBase entityLiving = entities.get(new Random().nextInt(entities.size()));
-        if (entityLiving != entity) {
-            //XOR, XOR, blah blah blah
-            double tempX = entity.posX;
-            double tempY = entity.posY;
-            double tempZ = entity.posZ;
+	@Override
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+		List<EntityLivingBase> entities = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(entity.posX - 15, entity.posY - 15, entity.posZ - 15, entity.posX + 15, entity.posY + 15, entity.posZ + 15));
+		EntityLivingBase entityLiving = entities.get(new Random().nextInt(entities.size()));
+		if (entityLiving != entity) {
+			//XOR, XOR, blah blah blah
+			double tempX = entity.posX;
+			double tempY = entity.posY;
+			double tempZ = entity.posZ;
 
-            entity.setPositionAndUpdate(entityLiving.posX, entityLiving.posY, entityLiving.posZ);
-            entityLiving.setPositionAndUpdate(tempX, tempY, tempZ);
-        }
-    }
+			entity.setPositionAndUpdate(entityLiving.posX, entityLiving.posY, entityLiving.posZ);
+			entityLiving.setPositionAndUpdate(tempX, tempY, tempZ);
+		}
+	}
 }

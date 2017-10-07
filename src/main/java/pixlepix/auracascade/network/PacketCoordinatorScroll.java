@@ -12,35 +12,35 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
  */
 public class PacketCoordinatorScroll implements IMessage {
 
-    public EntityPlayer player;
-    public String filter;
-    public float scroll;
+	public EntityPlayer player;
+	public String filter;
+	public float scroll;
 
-    public PacketCoordinatorScroll(EntityPlayer player, String filter, float scroll) {
-        this.player = player;
-        this.filter = filter;
-        this.scroll = scroll;
-    }
+	public PacketCoordinatorScroll(EntityPlayer player, String filter, float scroll) {
+		this.player = player;
+		this.filter = filter;
+		this.scroll = scroll;
+	}
 
-    public PacketCoordinatorScroll() {
+	public PacketCoordinatorScroll() {
 
 
-    }
+	}
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        World world = DimensionManager.getWorld(buf.readInt());
-        player = (EntityPlayer) world.getEntityByID(buf.readInt());
-        scroll = buf.readFloat();
-        filter = ByteBufUtils.readUTF8String(buf);
-    }
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		World world = DimensionManager.getWorld(buf.readInt());
+		player = (EntityPlayer) world.getEntityByID(buf.readInt());
+		scroll = buf.readFloat();
+		filter = ByteBufUtils.readUTF8String(buf);
+	}
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(player.world.provider.getDimension());
-        buf.writeInt(player.getEntityId());
-        buf.writeFloat(scroll);
-        ByteBufUtils.writeUTF8String(buf, filter);
-    }
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(player.world.provider.getDimension());
+		buf.writeInt(player.getEntityId());
+		buf.writeFloat(scroll);
+		ByteBufUtils.writeUTF8String(buf, filter);
+	}
 
 }

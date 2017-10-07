@@ -25,63 +25,65 @@ import java.util.ArrayList;
  */
 public class BlockTrampoline extends Block implements ITTinkererBlock {
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0F, 0F, 0F, 1F, .8F, 1F);
-    public BlockTrampoline() {
-        super(Material.CLOTH);
-        setLightLevel(1F);
-        setHardness(2F);
-    }
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	public BlockTrampoline() {
+		super(Material.CLOTH);
+		setLightLevel(1F);
+		setHardness(2F);
+	}
 
-    @Override
-    public String getBlockName() {
-        return "trampoline";
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
-        entity.motionY = 10;
+	@Override
+	public String getBlockName() {
+		return "trampoline";
+	}
 
-    }
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
+		entity.motionY = 10;
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	}
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlock() {
-        return null;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    @Override
-    public Class<? extends TileEntity> getTileEntity() {
-        return null;
-    }
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), " S ", "SIS", " S ", 'I', ItemMaterial.getIngot(EnumRainbowColor.VIOLET), 'S', new ItemStack(Items.SLIME_BALL));
-    }
+	@Override
+	public Class<? extends TileEntity> getTileEntity() {
+		return null;
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -50;
-    }
-    @Override
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), " S ", "SIS", " S ", 'I', ItemMaterial.getIngot(EnumRainbowColor.VIOLET), 'S', new ItemStack(Items.SLIME_BALL));
+	}
+
+	@Override
+	public int getCreativeTabPriority() {
+		return -50;
+	}
+
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return AABB;
 	}

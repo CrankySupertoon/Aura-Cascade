@@ -17,35 +17,35 @@ import pixlepix.auracascade.main.ConstantMod;
 @Mod(modid = ConstantMod.modId, name = ConstantMod.modName, version = ConstantMod.version, dependencies = "required-after:baubles", acceptedMinecraftVersions = "[1.11.2]")
 public class AuraCascade {
 
-  //  public static SimpleAnalytics analytics;
+	//  public static SimpleAnalytics analytics;
 
-    @Instance(ConstantMod.modId)
-    public static AuraCascade instance;
+	@Instance(ConstantMod.modId)
+	public static AuraCascade instance;
 
-    @SidedProxy(clientSide = ConstantMod.clientProxy, serverSide = ConstantMod.commonProxy)
-    public static CommonProxy proxy;
-    public static Logger log;
+	@SidedProxy(clientSide = ConstantMod.clientProxy, serverSide = ConstantMod.commonProxy)
+	public static CommonProxy proxy;
+	public static Logger log;
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        log = event.getModLog();
-        proxy.preInit(event);
-    }
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		log = event.getModLog();
+		proxy.preInit(event);
+	}
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init(event);
-    }
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		proxy.init(event);
+	}
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		proxy.postInit(event);
 
-    }
+	}
 
-    @EventHandler
-    public void onIMC(FMLInterModComms.IMCEvent event) {
-        IMCManager.onIMC(event);
+	@EventHandler
+	public void onIMC(FMLInterModComms.IMCEvent event) {
+		IMCManager.onIMC(event);
 
-    }
+	}
 }

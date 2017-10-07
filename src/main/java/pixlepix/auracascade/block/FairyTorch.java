@@ -23,93 +23,95 @@ import java.util.Random;
  */
 public class FairyTorch extends Block implements ITTinkererBlock {
 
-    public final String name = "fairyTorch";
-    private static final AxisAlignedBB AABB = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
-    public FairyTorch() {
-        super(Material.GLASS);
-        setTickRandomly(true);
-        setLightLevel(1F);
-    }
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+	public final String name = "fairyTorch";
 
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
+	public FairyTorch() {
+		super(Material.GLASS);
+		setTickRandomly(true);
+		setLightLevel(1F);
+	}
 
-    @Override
-    public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
-        return true;
-    }
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+		return true;
+	}
 
-    @Override
-    public boolean isAir(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return true;
-    }
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public int quantityDropped(Random p_149745_1_) {
-        return 0;
-    }
+	@Override
+	public boolean isAir(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return true;
+	}
 
-    @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        return new ArrayList<ItemStack>();
-    }
+	@Override
+	public int quantityDropped(Random p_149745_1_) {
+		return 0;
+	}
 
-    @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(world, pos, state, rand);
-        if (!world.isRemote) {
-            world.setBlockToAir(pos);
-        }
-    }
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		return new ArrayList<ItemStack>();
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(world, pos, state, rand);
+		if (!world.isRemote) {
+			world.setBlockToAir(pos);
+		}
+	}
 
-    @Override
-    public String getBlockName() {
-        return name;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public String getBlockName() {
+		return name;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return false;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlock() {
-        return null;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return false;
+	}
 
-    @Override
-    public Class<? extends TileEntity> getTileEntity() {
-        return null;
-    }
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return null;
-    }
+	@Override
+	public Class<? extends TileEntity> getTileEntity() {
+		return null;
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return 0;
-    }
-    @Override
-   	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-   		return AABB;
-   	}
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return null;
+	}
+
+	@Override
+	public int getCreativeTabPriority() {
+		return 0;
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return AABB;
+	}
 }

@@ -15,48 +15,48 @@ import java.util.ArrayList;
  * Created by localmacaccount on 2/3/15.
  */
 public class ItemRedHole extends Item implements ITTinkererItem {
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public String getItemName() {
-        return "redHole";
-    }
+	@Override
+	public String getItemName() {
+		return "redHole";
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    @Override
-    public boolean onEntityItemUpdate(EntityItem entityItem) {
-        World world = entityItem.world;
-        if (!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
-            world.createExplosion(entityItem, entityItem.posX, entityItem.posY, entityItem.posZ, 12F, true);
-            return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean onEntityItemUpdate(EntityItem entityItem) {
+		World world = entityItem.world;
+		if (!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
+			world.createExplosion(entityItem, entityItem.posX, entityItem.posY, entityItem.posZ, 12F, true);
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public int getEntityLifespan(ItemStack itemStack, World world) {
-        return 30000;
-    }
+	@Override
+	public int getEntityLifespan(ItemStack itemStack, World world) {
+		return 30000;
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), "IGI", " I ", "IGI", 'G', ItemMaterial.getGem(EnumRainbowColor.RED), 'I', ItemMaterial.getIngot(EnumRainbowColor.RED));
-    }
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), "IGI", " I ", "IGI", 'G', ItemMaterial.getGem(EnumRainbowColor.RED), 'I', ItemMaterial.getIngot(EnumRainbowColor.RED));
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -50;
-    }
+	@Override
+	public int getCreativeTabPriority() {
+		return -50;
+	}
 }

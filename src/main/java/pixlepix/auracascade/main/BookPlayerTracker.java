@@ -5,9 +5,9 @@ package pixlepix.auracascade.main;
  */
 public class BookPlayerTracker {
 	//TODO Fuck the quest system
-    public boolean hasReceived;
-    /*
-    @Override
+	public boolean hasReceived;
+	/*
+	@Override
     public void saveNBTData(NBTTagCompound compound) {
         compound.setBoolean("HAS_REVEICED_AURA_BOOK", hasReceived);
     }

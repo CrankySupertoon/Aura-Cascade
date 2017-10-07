@@ -13,29 +13,29 @@ import pixlepix.auracascade.main.Config;
 public class AuraTilePumpRedstone extends AuraTilePumpBase {
 
 
-    @Override
-    public void update() {
-        super.update();
-        if (pumpPower == 0) {
-            for (EnumFacing direction : EnumFacing.VALUES) {
-                for (int i = 1; i < 16; i++) {
-                    BlockPos pos = getPos().offset(direction, i);
-                    Block block = world.getBlockState(pos).getBlock();
-                    if (block instanceof BlockRedstoneWire && world.getBlockState(pos).getValue(BlockRedstoneWire.POWER) > 0) {
-                        addFuel((int) (Config.pumpRedstoneDuration * Math.pow(1.4, i)), Config.pumpRedstoneSpeed);
-                        if (!world.isRemote) {
-                            for (int j = 0; j < 5; j++) {
-                                AuraCascade.proxy.addBlockDestroyEffects(pos);
-                            }
-                        }
+	@Override
+	public void update() {
+		super.update();
+		if (pumpPower == 0) {
+			for (EnumFacing direction : EnumFacing.VALUES) {
+				for (int i = 1; i < 16; i++) {
+					BlockPos pos = getPos().offset(direction, i);
+					Block block = world.getBlockState(pos).getBlock();
+					if (block instanceof BlockRedstoneWire && world.getBlockState(pos).getValue(BlockRedstoneWire.POWER) > 0) {
+						addFuel((int) (Config.pumpRedstoneDuration * Math.pow(1.4, i)), Config.pumpRedstoneSpeed);
+						if (!world.isRemote) {
+							for (int j = 0; j < 5; j++) {
+								AuraCascade.proxy.addBlockDestroyEffects(pos);
+							}
+						}
 
-                        world.setBlockToAir(pos);
-                    } else {
-                        break;
-                    }
-                }
-            }
+						world.setBlockToAir(pos);
+					} else {
+						break;
+					}
+				}
+			}
 
-        }
-    }
+		}
+	}
 }

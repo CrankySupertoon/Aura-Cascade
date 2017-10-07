@@ -7,11 +7,11 @@ import pixlepix.auracascade.lexicon.page.PageTutorial;
  */
 public class TLexiconEntry extends BLexiconEntry {
 
-    public TLexiconEntry() {
-        super("tutorial", CategoryManager.categoryBasics);
-        setPriority();
-        setLexiconPages(new PageTutorial("0"));
-    }
+	public TLexiconEntry() {
+		super("tutorial", CategoryManager.categoryBasics);
+		setPriority();
+		setLexiconPages(new PageTutorial("0"));
+	}
 
 
 }

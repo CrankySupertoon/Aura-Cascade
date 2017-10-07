@@ -26,66 +26,68 @@ import java.util.ArrayList;
  */
 public class BlockMagicRoad extends Block implements ITTinkererBlock {
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0F, 0F, 0F, 1F, .8F, 1F);
-    public BlockMagicRoad() {
-        super(Material.ROCK);
-        setHardness(2F);
-        setLightLevel(1F);
-    }
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	public BlockMagicRoad() {
+		super(Material.ROCK);
+		setHardness(2F);
+		setLightLevel(1F);
+	}
 
-    @Override
-    public String getBlockName() {
-        return "magicRoad";
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
-        Vec3d dir = new Vec3d(entity.motionX, entity.motionY, entity.motionZ);
-        if (dir.lengthVector() > 0.25) {
-            dir = dir.normalize();
-            entity.addVelocity(dir.xCoord * 5, dir.yCoord * 5, dir.zCoord * 5);
-        }
-    }
+	@Override
+	public String getBlockName() {
+		return "magicRoad";
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
+		Vec3d dir = new Vec3d(entity.motionX, entity.motionY, entity.motionZ);
+		if (dir.lengthVector() > 0.25) {
+			dir = dir.normalize();
+			entity.addVelocity(dir.xCoord * 5, dir.yCoord * 5, dir.zCoord * 5);
+		}
+	}
 
-    @Override
-    public boolean isFullyOpaque(IBlockState state) {
-        return false;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean isFullyOpaque(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlock() {
-        return null;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    @Override
-    public Class<? extends TileEntity> getTileEntity() {
-        return null;
-    }
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this, 32), "BBB", "BIB", "BBB", 'I', ItemMaterial.getIngot(EnumRainbowColor.BLACK), 'B', new ItemStack(Blocks.STONEBRICK));
-    }
+	@Override
+	public Class<? extends TileEntity> getTileEntity() {
+		return null;
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -50;
-    }
-    @Override
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this, 32), "BBB", "BIB", "BBB", 'I', ItemMaterial.getIngot(EnumRainbowColor.BLACK), 'B', new ItemStack(Blocks.STONEBRICK));
+	}
+
+	@Override
+	public int getCreativeTabPriority() {
+		return -50;
+	}
+
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return AABB;
 	}

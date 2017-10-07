@@ -15,31 +15,31 @@ import static net.minecraft.client.Minecraft.getMinecraft;
  */
 public class PageTutorial extends PageText {
 
-    GuiButton button;
+	GuiButton button;
 
-    public PageTutorial(String unlocalizedName) {
-        super(unlocalizedName);
-    }
+	public PageTutorial(String unlocalizedName) {
+		super(unlocalizedName);
+	}
 
-    @Override
-    public void onOpened(IGuiLexiconEntry gui) {
-        button = new GuiButton(101, gui.getLeft() + 30, gui.getTop() + gui.getHeight() - 50, gui.getWidth() - 60, 20, I18n.translateToLocal("startTutorial"));
-        gui.getButtonList().add(button);
-    }
+	@Override
+	public void onOpened(IGuiLexiconEntry gui) {
+		button = new GuiButton(101, gui.getLeft() + 30, gui.getTop() + gui.getHeight() - 50, gui.getWidth() - 60, 20, I18n.translateToLocal("startTutorial"));
+		gui.getButtonList().add(button);
+	}
 
-    @Override
-    public void onClosed(IGuiLexiconEntry gui) {
-        gui.getButtonList().remove(button);
-    }
+	@Override
+	public void onClosed(IGuiLexiconEntry gui) {
+		gui.getButtonList().remove(button);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onActionPerformed(GuiButton button) {
-        if (button == this.button) {
-            GuiLexicon.startTutorial();
-            getMinecraft().displayGuiScreen(new GuiLexicon());
-            getMinecraft().player.sendChatMessage(String.valueOf(new TextComponentString("aura.tutorialStarted")));
-        }
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void onActionPerformed(GuiButton button) {
+		if (button == this.button) {
+			GuiLexicon.startTutorial();
+			getMinecraft().displayGuiScreen(new GuiLexicon());
+			getMinecraft().player.sendChatMessage(String.valueOf(new TextComponentString("aura.tutorialStarted")));
+		}
+	}
 
 }

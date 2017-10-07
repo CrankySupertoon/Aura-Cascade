@@ -10,24 +10,24 @@ import pixlepix.auracascade.data.Quest;
 public class LexiconEntryQuest extends BLexiconEntry {
 
 
-    private Quest quest;
+	private Quest quest;
 
-    /**
-     * @param unlocalizedName The unlocalized name of this entry. This will be localized by the client display.
-     * @param category
-     */
-    public LexiconEntryQuest(String unlocalizedName, LexiconCategory category, Quest quest) {
-        super(unlocalizedName, category);
-        this.quest = quest;
-    }
+	/**
+	 * @param unlocalizedName The unlocalized name of this entry. This will be localized by the client display.
+	 * @param category
+	 */
+	public LexiconEntryQuest(String unlocalizedName, LexiconCategory category, Quest quest) {
+		super(unlocalizedName, category);
+		this.quest = quest;
+	}
 
-    @Override
-    public String getNameForSorting() {
-        return getUnlocalizedName();
-    }
+	@Override
+	public String getNameForSorting() {
+		return getUnlocalizedName();
+	}
 
-    @Override
-    public String getSuffix() {
-        return quest.hasCompleted(AuraCascade.proxy.getPlayer()) ? " §2COMPLETE" : " §4INCOMPLETE";
-    }
+	@Override
+	public String getSuffix() {
+		return quest.hasCompleted(AuraCascade.proxy.getPlayer()) ? " §2COMPLETE" : " §4INCOMPLETE";
+	}
 }

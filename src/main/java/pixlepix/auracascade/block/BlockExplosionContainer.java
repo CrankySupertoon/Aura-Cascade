@@ -34,237 +34,237 @@ import java.util.Random;
  */
 public class BlockExplosionContainer extends Block implements ITTinkererBlock {
 
-    public String type;
-    public static final PropertyInteger DAMAGE = PropertyInteger.create("damage", 0, 15);
+	public static final PropertyInteger DAMAGE = PropertyInteger.create("damage", 0, 15);
+	public String type;
 
-    public BlockExplosionContainer() {
-        super(Material.ROCK);
-        //Same as obby
-        setResistance(2000F);
-        type = "Dirt";
-        setTickRandomly(true);
-        setHardness(2F);
-        setDefaultState(blockState.getBaseState().withProperty(DAMAGE, 0));
-    }
+	public BlockExplosionContainer() {
+		super(Material.ROCK);
+		//Same as obby
+		setResistance(2000F);
+		type = "Dirt";
+		setTickRandomly(true);
+		setHardness(2F);
+		setDefaultState(blockState.getBaseState().withProperty(DAMAGE, 0));
+	}
 
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, DAMAGE);
-    }
+	public BlockExplosionContainer(String s) {
+		this();
+		type = s;
+		if (type.equals("Glass")) {
+			//setLightLevel(15);
+			setLightOpacity(1);
+		}
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(DAMAGE);
-    }
+	public static BlockExplosionContainer getBlockFromName(String name) {
+		List<Block> blockList = BlockRegistry.getBlockFromClass(BlockExplosionContainer.class);
+		for (Block b : blockList) {
+			if (((BlockExplosionContainer) b).type != null && ((BlockExplosionContainer) b).type.equals(name)) {
+				return (BlockExplosionContainer) b;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(DAMAGE, meta);
-    }
+	public static PageCraftingRecipe getRecipe(String unloc, String name) {
+		return new PageCraftingRecipe(unloc, BlockRegistry.getRecipe(getBlockFromName(name)));
+	}
 
-    public BlockExplosionContainer(String s) {
-        this();
-        type = s;
-        if (type.equals("Glass")) {
-            //setLightLevel(15);
-            setLightOpacity(1);
-        }
-    }
+	@Override
+	public BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, DAMAGE);
+	}
 
-    public static BlockExplosionContainer getBlockFromName(String name) {
-        List<Block> blockList = BlockRegistry.getBlockFromClass(BlockExplosionContainer.class);
-        for (Block b : blockList) {
-            if (((BlockExplosionContainer) b).type != null && ((BlockExplosionContainer) b).type.equals(name)) {
-                return (BlockExplosionContainer) b;
-            }
-        }
-        return null;
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(DAMAGE);
+	}
 
-    public static PageCraftingRecipe getRecipe(String unloc, String name) {
-        return new PageCraftingRecipe(unloc, BlockRegistry.getRecipe(getBlockFromName(name)));
-    }
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(DAMAGE, meta);
+	}
 
-    @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-        super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
-        world.scheduleUpdate(pos, this, tickRate(world));
-        return getStateFromMeta(meta);
-    }
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
+		world.scheduleUpdate(pos, this, tickRate(world));
+		return getStateFromMeta(meta);
+	}
 
-    @Override
-    public int tickRate(World world) {
-        return 100;
-    }
+	@Override
+	public int tickRate(World world) {
+		return 100;
+	}
 
-    @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(world, pos, state, rand);
-        if (rand.nextDouble() < getChanceToRepair()) {
-            int damage = state.getValue(DAMAGE);
-            if (damage > 0) {
-                world.setBlockState(pos, state.withProperty(DAMAGE, damage - 1), 3);
-            }
-        }
-        world.scheduleUpdate(pos, this, tickRate(world) + rand.nextInt(5));
-    }
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(world, pos, state, rand);
+		if (rand.nextDouble() < getChanceToRepair()) {
+			int damage = state.getValue(DAMAGE);
+			if (damage > 0) {
+				world.setBlockState(pos, state.withProperty(DAMAGE, damage - 1), 3);
+			}
+		}
+		world.scheduleUpdate(pos, this, tickRate(world) + rand.nextInt(5));
+	}
 
-    /**
-     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
-     */
-    @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return isOpaqueCube(state);
-    }
+	/**
+	 * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
+	 */
+	@Override
+	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return isOpaqueCube(state);
+	}
 
-    public double getChanceToResist() {
-        return 1 - (1 / (getVirtualHealth() / 16D));
-    }
+	public double getChanceToResist() {
+		return 1 - (1 / (getVirtualHealth() / 16D));
+	}
 
-    public double getChanceToRepair() {
-        return 1 / (getRepairSeconds() / 5D);
-    }
+	public double getChanceToRepair() {
+		return 1 / (getRepairSeconds() / 5D);
+	}
 
-    public int getRepairSeconds() {
-        if (type.equals("Dirt")) {
-            return 120;
-        }
-        if (type.equals("Wood")) {
-            return 5;
-        }
-        if (type.equals("Glass")) {
-            return 120;
-        }
-        if (type.equals("Cobblestone")) {
-            return 30;
-        }
-        if (type.equals("Stone")) {
-            return 60;
-        }
-        //10m
-        if (type.equals("Obsidian")) {
-            return 6000;
-        }
-        return 0;
-    }
+	public int getRepairSeconds() {
+		if (type.equals("Dirt")) {
+			return 120;
+		}
+		if (type.equals("Wood")) {
+			return 5;
+		}
+		if (type.equals("Glass")) {
+			return 120;
+		}
+		if (type.equals("Cobblestone")) {
+			return 30;
+		}
+		if (type.equals("Stone")) {
+			return 60;
+		}
+		//10m
+		if (type.equals("Obsidian")) {
+			return 6000;
+		}
+		return 0;
+	}
 
-    public int getVirtualHealth() {
-        if (type.equals("Dirt")) {
-            return 50;
-        }
-        if (type.equals("Wood")) {
-            return 30;
-        }
-        if (type.equals("Glass")) {
-            return 16;
-        }
-        if (type.equals("Cobblestone")) {
-            return 75;
-        }
-        if (type.equals("Stone")) {
-            return 100;
-        }
-        if (type.equals("Obsidian")) {
-            return 1600;
-        }
-        return 0;
+	public int getVirtualHealth() {
+		if (type.equals("Dirt")) {
+			return 50;
+		}
+		if (type.equals("Wood")) {
+			return 30;
+		}
+		if (type.equals("Glass")) {
+			return 16;
+		}
+		if (type.equals("Cobblestone")) {
+			return 75;
+		}
+		if (type.equals("Stone")) {
+			return 100;
+		}
+		if (type.equals("Obsidian")) {
+			return 1600;
+		}
+		return 0;
 
-    }
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        ArrayList<Object> result = new ArrayList<Object>();
-        result.add("Wood");
-        result.add("Glass");
-        result.add("Cobblestone");
-        result.add("Stone");
-        result.add("Obsidian");
-        return result;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		ArrayList<Object> result = new ArrayList<Object>();
+		result.add("Wood");
+		result.add("Glass");
+		result.add("Cobblestone");
+		result.add("Stone");
+		result.add("Obsidian");
+		return result;
+	}
 
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
-        if (!type.equals("Glass")) {
-            return true;
-        }
-        Block block = world.getBlockState(pos).getBlock();
-        return block != this;
-    }
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		if (!type.equals("Glass")) {
+			return true;
+		}
+		Block block = world.getBlockState(pos).getBlock();
+		return block != this;
+	}
 
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        if ("Glass".equals(type)) {
-            return layer == BlockRenderLayer.CUTOUT_MIPPED || layer == BlockRenderLayer.TRANSLUCENT;
-        } else {
-            return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
-        }
-    }
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		if ("Glass".equals(type)) {
+			return layer == BlockRenderLayer.CUTOUT_MIPPED || layer == BlockRenderLayer.TRANSLUCENT;
+		} else {
+			return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
+		}
+	}
 
-    @Override
-    public String getBlockName() {
-        return "fortified" + type;
-    }
+	@Override
+	public String getBlockName() {
+		return "fortified" + type;
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlock() {
-        return null;
-    }
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
 
-    @Override
-    public Class<? extends TileEntity> getTileEntity() {
-        return null;
-    }
+	@Override
+	public Class<? extends TileEntity> getTileEntity() {
+		return null;
+	}
 
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
-     */
-    @Override
-    public boolean isFullyOpaque(IBlockState state) {
-        return type == null || !type.equals("Glass");
-    }
+	/**
+	 * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
+	 * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
+	 */
+	@Override
+	public boolean isFullyOpaque(IBlockState state) {
+		return type == null || !type.equals("Glass");
+	}
 
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        if (type.equals("Dirt")) {
-            return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.DIRT));
-        }
-        if (type.equals("Wood")) {
-            return new ThaumicTinkererRecipeMulti(new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS)),
-                    new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 1)),
-                    new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 2)),
-                    new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 3)),
-                    new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 4)),
-                    new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 5)));
-        }
-        if (type.equals("Glass")) {
-            return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.GLASS));
-        }
-        if (type.equals("Cobblestone")) {
-            return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.COBBLESTONE));
-        }
-        if (type.equals("Stone")) {
-            return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.STONE));
-        }
-        if (type.equals("Obsidian")) {
-            return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.OBSIDIAN));
-        }
-        return null;
-    }
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		if (type.equals("Dirt")) {
+			return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.DIRT));
+		}
+		if (type.equals("Wood")) {
+			return new ThaumicTinkererRecipeMulti(new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS)),
+					new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 1)),
+					new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 2)),
+					new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 3)),
+					new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 4)),
+					new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.PLANKS, 1, 5)));
+		}
+		if (type.equals("Glass")) {
+			return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.GLASS));
+		}
+		if (type.equals("Cobblestone")) {
+			return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.COBBLESTONE));
+		}
+		if (type.equals("Stone")) {
+			return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.STONE));
+		}
+		if (type.equals("Obsidian")) {
+			return new ProcessorRecipe(new ItemStack(this), false, new ItemStack(Blocks.END_STONE), new ItemStack(Blocks.OBSIDIAN));
+		}
+		return null;
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return 23;
-    }
+	@Override
+	public int getCreativeTabPriority() {
+		return 23;
+	}
 }

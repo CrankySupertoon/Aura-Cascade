@@ -15,40 +15,40 @@ import java.util.List;
  */
 public class AuraTilePumpProjectile extends AuraTilePumpBase {
 
-    public void onEntityCollidedWithBlock(Entity entity) {
-        if (entity instanceof EntityArrow) {
-            addFuel(Config.pumpArrowDuration, Config.pumpArrowSpeed);
-        }
+	public void onEntityCollidedWithBlock(Entity entity) {
+		if (entity instanceof EntityArrow) {
+			addFuel(Config.pumpArrowDuration, Config.pumpArrowSpeed);
+		}
 
-        if (entity instanceof EntityEgg) {
-            addFuel(Config.pumpEggDuration, Config.pumpEggSpeed);
-        }
+		if (entity instanceof EntityEgg) {
+			addFuel(Config.pumpEggDuration, Config.pumpEggSpeed);
+		}
 
-        if (entity instanceof EntitySnowball) {
-            addFuel(Config.pumpSnowballDuration, Config.pumpSnowballSpeed);
-        }
-    }
+		if (entity instanceof EntitySnowball) {
+			addFuel(Config.pumpSnowballDuration, Config.pumpSnowballSpeed);
+		}
+	}
 
-    @Override
-    public void update() {
-        super.update();
-        List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX() - .5, pos.getY() - .5, pos.getZ() - .5, pos.getX() + 1.5, pos.getY() + 1.5, pos.getZ() + 1.5));
-        for (Entity entity : entityList) {
-            if (entity instanceof EntitySnowball || entity instanceof EntityEgg) {
-                //Fun fact: Eggs and snowballs use the same particle code
-                for (int i = 0; i < 8; ++i) {
-                    this.world.spawnParticle(EnumParticleTypes.SNOWBALL, entity.posX, entity.posY, entity.posZ, 0.0D, 0.0D, 0.0D);
-                }
-                entity.setDead();
-                if (!world.isRemote) {
-                    onEntityCollidedWithBlock(entity);
-                }
-            } else if (entity instanceof EntityArrow) {
-                entity.setDead();
-                if (!world.isRemote) {
-                    onEntityCollidedWithBlock(entity);
-                }
-            }
-        }
-    }
+	@Override
+	public void update() {
+		super.update();
+		List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX() - .5, pos.getY() - .5, pos.getZ() - .5, pos.getX() + 1.5, pos.getY() + 1.5, pos.getZ() + 1.5));
+		for (Entity entity : entityList) {
+			if (entity instanceof EntitySnowball || entity instanceof EntityEgg) {
+				//Fun fact: Eggs and snowballs use the same particle code
+				for (int i = 0; i < 8; ++i) {
+					this.world.spawnParticle(EnumParticleTypes.SNOWBALL, entity.posX, entity.posY, entity.posZ, 0.0D, 0.0D, 0.0D);
+				}
+				entity.setDead();
+				if (!world.isRemote) {
+					onEntityCollidedWithBlock(entity);
+				}
+			} else if (entity instanceof EntityArrow) {
+				entity.setDead();
+				if (!world.isRemote) {
+					onEntityCollidedWithBlock(entity);
+				}
+			}
+		}
+	}
 }

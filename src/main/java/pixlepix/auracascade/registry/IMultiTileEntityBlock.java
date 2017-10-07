@@ -9,6 +9,6 @@ import java.util.HashMap;
  */
 public interface IMultiTileEntityBlock extends ITTinkererBlock {
 
-    HashMap<Class<? extends TileEntity>, String> getAdditionalTileEntities();
+	HashMap<Class<? extends TileEntity>, String> getAdditionalTileEntities();
 
 }

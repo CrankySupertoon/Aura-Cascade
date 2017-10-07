@@ -19,45 +19,45 @@ import java.util.ArrayList;
  * Created by localmacaccount on 2/5/15.
  */
 public class ItemBlackHole extends Item implements ITTinkererItem {
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public String getItemName() {
-        return "blackHole";
-    }
+	@Override
+	public String getItemName() {
+		return "blackHole";
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isSelected) {
-        if (entity instanceof EntityPlayer && !world.isRemote && world.getTotalWorldTime() % 100 == 0) {
-            InventoryPlayer inv = ((EntityPlayer) entity).inventory;
-            for (int i = 0; i < inv.getSizeInventory(); i++) {
-                if (inv.getStackInSlot(i) != null && Block.getBlockFromItem(inv.getStackInSlot(i).getItem()) == Blocks.COBBLESTONE) {
-                    inv.setInventorySlotContents(i, null);
-                }
-            }
-        }
-    }
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isSelected) {
+		if (entity instanceof EntityPlayer && !world.isRemote && world.getTotalWorldTime() % 100 == 0) {
+			InventoryPlayer inv = ((EntityPlayer) entity).inventory;
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
+				if (inv.getStackInSlot(i) != null && Block.getBlockFromItem(inv.getStackInSlot(i).getItem()) == Blocks.COBBLESTONE) {
+					inv.setInventorySlotContents(i, null);
+				}
+			}
+		}
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), "CCC", "CIC", "CCC", 'C', new ItemStack(Blocks.COBBLESTONE), 'I', ItemMaterial.getIngot(EnumRainbowColor.BLACK));
-    }
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), "CCC", "CIC", "CCC", 'C', new ItemStack(Blocks.COBBLESTONE), 'I', ItemMaterial.getIngot(EnumRainbowColor.BLACK));
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -50;
-    }
+	@Override
+	public int getCreativeTabPriority() {
+		return -50;
+	}
 }

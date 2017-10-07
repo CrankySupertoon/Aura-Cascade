@@ -10,16 +10,16 @@ import java.util.ArrayList;
  */
 public interface ITTinkererBlock extends ITTinkererRegisterable {
 
-    ArrayList<Object> getSpecialParameters();
+	ArrayList<Object> getSpecialParameters();
 
-    String getBlockName();
+	String getBlockName();
 
-    boolean shouldRegister();
+	boolean shouldRegister();
 
-    boolean shouldDisplayInTab();
+	boolean shouldDisplayInTab();
 
-    Class<? extends ItemBlock> getItemBlock();
+	Class<? extends ItemBlock> getItemBlock();
 
-    Class<? extends TileEntity> getTileEntity();
+	Class<? extends TileEntity> getTileEntity();
 
 }

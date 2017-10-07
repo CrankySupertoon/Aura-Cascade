@@ -13,34 +13,34 @@ import pixlepix.auracascade.block.entity.EntityFairy;
  */
 public class PacketFairyRequestUpdate implements IMessage, IMessageHandler<PacketFairyRequestUpdate, PacketFairyUpdate> {
 
-    public EntityFairy entityFairy;
+	public EntityFairy entityFairy;
 
-    public PacketFairyRequestUpdate(EntityFairy fairy) {
-        this.entityFairy = fairy;
-    }
+	public PacketFairyRequestUpdate(EntityFairy fairy) {
+		this.entityFairy = fairy;
+	}
 
-    public PacketFairyRequestUpdate() {
-    }
+	public PacketFairyRequestUpdate() {
+	}
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        World world = DimensionManager.getWorld(buf.readInt());
-        if (world != null) {
-            entityFairy = (EntityFairy) world.getEntityByID(buf.readInt());
-        }
-    }
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		World world = DimensionManager.getWorld(buf.readInt());
+		if (world != null) {
+			entityFairy = (EntityFairy) world.getEntityByID(buf.readInt());
+		}
+	}
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(entityFairy.world.provider.getDimension());
-        buf.writeInt(entityFairy.getEntityId());
-    }
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(entityFairy.world.provider.getDimension());
+		buf.writeInt(entityFairy.getEntityId());
+	}
 
-    @Override
-    public PacketFairyUpdate onMessage(final PacketFairyRequestUpdate message, MessageContext ctx) {
-        if (message.entityFairy != null) {
-            return new PacketFairyUpdate(message.entityFairy);
-        }
-        return null;
-    }
+	@Override
+	public PacketFairyUpdate onMessage(final PacketFairyRequestUpdate message, MessageContext ctx) {
+		if (message.entityFairy != null) {
+			return new PacketFairyUpdate(message.entityFairy);
+		}
+		return null;
+	}
 }

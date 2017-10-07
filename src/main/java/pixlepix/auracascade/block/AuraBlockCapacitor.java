@@ -10,30 +10,30 @@ import java.util.ArrayList;
 // Extend so we can use blockstates without forcing them on all the other blocks >.>
 public class AuraBlockCapacitor extends AuraBlock {
 
-    public static final PropertyBool BURSTING = PropertyBool.create("bursting");
+	public static final PropertyBool BURSTING = PropertyBool.create("bursting");
 
-    public AuraBlockCapacitor() {
-        super("capacitor");
-        setDefaultState(blockState.getBaseState().withProperty(BURSTING, false));
-    }
+	public AuraBlockCapacitor() {
+		super("capacitor");
+		setDefaultState(blockState.getBaseState().withProperty(BURSTING, false));
+	}
 
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, BURSTING);
-    }
+	@Override
+	public BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, BURSTING);
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(BURSTING) ? 1 : 0;
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(BURSTING) ? 1 : 0;
+	}
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(BURSTING, meta == 1);
-    }
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(BURSTING, meta == 1);
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return Lists.newArrayList((Object) "capacitor");
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return Lists.newArrayList((Object) "capacitor");
+	}
 }

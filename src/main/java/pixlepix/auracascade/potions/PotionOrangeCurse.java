@@ -13,26 +13,26 @@ import java.util.Random;
 
 
 public class PotionOrangeCurse extends Potion {
-    public PotionOrangeCurse() {
-        super(true, EnumRainbowColor.ORANGE.color.getHex());
-        setPotionName("Orange Curse");
+	public PotionOrangeCurse() {
+		super(true, EnumRainbowColor.ORANGE.color.getHex());
+		setPotionName("Orange Curse");
 
-    }
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
-        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.ORANGE), x + 8, y + 8);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
+		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.ORANGE), x + 8, y + 8);
+	}
 
-    @Override
-    public boolean isReady(int p_76397_1_, int p_76397_2_) {
-        return new Random().nextInt(100) == 0;
-    }
+	@Override
+	public boolean isReady(int p_76397_1_, int p_76397_2_) {
+		return new Random().nextInt(100) == 0;
+	}
 
-    @Override
-    public void performEffect(EntityLivingBase entity, int amplifier) {
-        entity.motionY += 1;
-    }
+	@Override
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+		entity.motionY += 1;
+	}
 }

@@ -30,277 +30,277 @@ import java.util.Random;
  */
 public class ItemPrismaticWand extends Item implements ITTinkererItem {
 
-    public static String[] modes = new String[]{EnumColor.AQUA + "Selection", EnumColor.YELLOW + "Copy", EnumColor.ORANGE + "Paste"};
+	public static String[] modes = new String[]{EnumColor.AQUA + "Selection", EnumColor.YELLOW + "Copy", EnumColor.ORANGE + "Paste"};
 
 
-    public ItemPrismaticWand() {
-        super();
-        setMaxStackSize(1);
-    }
+	public ItemPrismaticWand() {
+		super();
+		setMaxStackSize(1);
+	}
 
-    @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        //More specific selections
-        if (!player.isSneaking() && !world.isRemote) {
-            if (player.getHeldItem(hand).getTagCompound() == null) {
-                player.getHeldItem(hand).setTagCompound(new NBTTagCompound());
-            }
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		//More specific selections
+		if (!player.isSneaking() && !world.isRemote) {
+			if (player.getHeldItem(hand).getTagCompound() == null) {
+				player.getHeldItem(hand).setTagCompound(new NBTTagCompound());
+			}
 
-            NBTTagCompound nbt = player.getHeldItem(hand).getTagCompound();
-            if (player.getHeldItem(hand).getItemDamage() == 0) {
-                if (nbt.hasKey("x1")) {
-                    nbt.setInteger("x2", nbt.getInteger("x1"));
-                    nbt.setInteger("y2", nbt.getInteger("y1"));
-                    nbt.setInteger("z2", nbt.getInteger("z1"));
-                }
-                nbt.setInteger("x1", pos.getX());
-                nbt.setInteger("y1", pos.getY());
-                nbt.setInteger("z1", pos.getZ());
-                player.sendStatusMessage(new TextComponentString("Position set"), false);
-                return EnumActionResult.PASS;
-            }
-        }
-        return EnumActionResult.FAIL;
-    }
+			NBTTagCompound nbt = player.getHeldItem(hand).getTagCompound();
+			if (player.getHeldItem(hand).getItemDamage() == 0) {
+				if (nbt.hasKey("x1")) {
+					nbt.setInteger("x2", nbt.getInteger("x1"));
+					nbt.setInteger("y2", nbt.getInteger("y1"));
+					nbt.setInteger("z2", nbt.getInteger("z1"));
+				}
+				nbt.setInteger("x1", pos.getX());
+				nbt.setInteger("y1", pos.getY());
+				nbt.setInteger("z1", pos.getZ());
+				player.sendStatusMessage(new TextComponentString("Position set"), false);
+				return EnumActionResult.PASS;
+			}
+		}
+		return EnumActionResult.FAIL;
+	}
 
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean p_77624_4_) {
-        super.addInformation(stack, player, list, p_77624_4_);
-        list.add(modes[stack.getItemDamage()]);
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean p_77624_4_) {
+		super.addInformation(stack, player, list, p_77624_4_);
+		list.add(modes[stack.getItemDamage()]);
 
-    }
+	}
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
-        int mode = player.getHeldItem(hand).getItemDamage();
-        if (player.isSneaking()) {
-            NBTTagCompound nbt = player.getHeldItem(hand).getTagCompound();
-            mode++;
-            mode = mode % modes.length;
-            player.getHeldItem(hand).setItemDamage(mode);
-            player.getHeldItem(hand).setTagCompound(nbt);
-            if (!world.isRemote) {
-                player.sendStatusMessage(new TextComponentString("Switched to: " + modes[mode]), false);
-            }
-        } else {
-            if (player.getHeldItem(hand).getTagCompound() == null) {
-                player.getHeldItem(hand).setTagCompound(new NBTTagCompound());
-            }
-            NBTTagCompound nbt = player.getHeldItem(hand).getTagCompound();
-            switch (mode) {
-                case 1:
-                    if (nbt.hasKey("x1") && nbt.hasKey("x2")) {
-                        nbt.setInteger("cx1", nbt.getInteger("x1"));
-                        nbt.setInteger("cy1", nbt.getInteger("y1"));
-                        nbt.setInteger("cz1", nbt.getInteger("z1"));
-                        nbt.setInteger("cx2", nbt.getInteger("x2"));
-                        nbt.setInteger("cy2", nbt.getInteger("y2"));
-                        nbt.setInteger("cz2", nbt.getInteger("z2"));
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		int mode = player.getHeldItem(hand).getItemDamage();
+		if (player.isSneaking()) {
+			NBTTagCompound nbt = player.getHeldItem(hand).getTagCompound();
+			mode++;
+			mode = mode % modes.length;
+			player.getHeldItem(hand).setItemDamage(mode);
+			player.getHeldItem(hand).setTagCompound(nbt);
+			if (!world.isRemote) {
+				player.sendStatusMessage(new TextComponentString("Switched to: " + modes[mode]), false);
+			}
+		} else {
+			if (player.getHeldItem(hand).getTagCompound() == null) {
+				player.getHeldItem(hand).setTagCompound(new NBTTagCompound());
+			}
+			NBTTagCompound nbt = player.getHeldItem(hand).getTagCompound();
+			switch (mode) {
+				case 1:
+					if (nbt.hasKey("x1") && nbt.hasKey("x2")) {
+						nbt.setInteger("cx1", nbt.getInteger("x1"));
+						nbt.setInteger("cy1", nbt.getInteger("y1"));
+						nbt.setInteger("cz1", nbt.getInteger("z1"));
+						nbt.setInteger("cx2", nbt.getInteger("x2"));
+						nbt.setInteger("cy2", nbt.getInteger("y2"));
+						nbt.setInteger("cz2", nbt.getInteger("z2"));
 
-                        //This is how far away the player is from the copy/paste
-                        nbt.setInteger("cxo", nbt.getInteger("x1") - roundToZero(player.posX));
-                        nbt.setInteger("cyo", nbt.getInteger("y1") - roundToZero(player.posY));
-                        nbt.setInteger("czo", nbt.getInteger("z1") - roundToZero(player.posZ));
+						//This is how far away the player is from the copy/paste
+						nbt.setInteger("cxo", nbt.getInteger("x1") - roundToZero(player.posX));
+						nbt.setInteger("cyo", nbt.getInteger("y1") - roundToZero(player.posY));
+						nbt.setInteger("czo", nbt.getInteger("z1") - roundToZero(player.posZ));
 
-                        if (!world.isRemote) {
-                            player.sendStatusMessage(new TextComponentString("Copied to clipboard"), false);
-                        }
-                    } else {
+						if (!world.isRemote) {
+							player.sendStatusMessage(new TextComponentString("Copied to clipboard"), false);
+						}
+					} else {
 
-                        if (!world.isRemote) {
-                            player.sendStatusMessage(new TextComponentString("Invalid selection"), false);
-                        }
-                    }
-                    break;
-                case 2:
-                    int x = (int) player.posX;
-                    int y = (int) player.posY;
-                    int z = (int) player.posZ;
+						if (!world.isRemote) {
+							player.sendStatusMessage(new TextComponentString("Invalid selection"), false);
+						}
+					}
+					break;
+				case 2:
+					int x = (int) player.posX;
+					int y = (int) player.posY;
+					int z = (int) player.posZ;
 
-                    if (nbt.hasKey("cx1")) {
-                        //Selection boundaries
-                        int cx1 = nbt.getInteger("cx1");
-                        int cy1 = nbt.getInteger("cy1");
-                        int cz1 = nbt.getInteger("cz1");
-                        int cx2 = nbt.getInteger("cx2");
-                        int cy2 = nbt.getInteger("cy2");
-                        int cz2 = nbt.getInteger("cz2");
+					if (nbt.hasKey("cx1")) {
+						//Selection boundaries
+						int cx1 = nbt.getInteger("cx1");
+						int cy1 = nbt.getInteger("cy1");
+						int cz1 = nbt.getInteger("cz1");
+						int cx2 = nbt.getInteger("cx2");
+						int cy2 = nbt.getInteger("cy2");
+						int cz2 = nbt.getInteger("cz2");
 
-                        //Offset from where the player standed as they calculated
-                        int xo = nbt.getInteger("cxo");
-                        int yo = nbt.getInteger("cyo");
-                        int zo = nbt.getInteger("czo");
-
-
-                        //For simplicities sake, c*1 is lower than c*2
-                        if (cx1 > cx2) {
-                            //Yes, yes, bitwise
-                            //But thats just a party trick
-                            //I mean, if you go to some nerdy parties
-
-                            //xo, yo, zo were originally calculated relative to x1, y1, z1
-                            //When we swap x1, we need to recalculate xo
-                            //The players position when they copy-pasted = cx1 - xo
-                            //New xo = newX1 - playerPos 
-                            //= cx2 - (cx1 - xo)
-                            //= xo + (cx2 - cx1)
-                            xo += (cx2 - cx1);
-                            int t = cx1;
-                            cx1 = cx2;
-                            cx2 = t;
+						//Offset from where the player standed as they calculated
+						int xo = nbt.getInteger("cxo");
+						int yo = nbt.getInteger("cyo");
+						int zo = nbt.getInteger("czo");
 
 
-                        }
+						//For simplicities sake, c*1 is lower than c*2
+						if (cx1 > cx2) {
+							//Yes, yes, bitwise
+							//But thats just a party trick
+							//I mean, if you go to some nerdy parties
 
-                        if (cy1 > cy2) {
-
-                            yo += (cy2 - cy1);
-                            int t = cy1;
-                            cy1 = cy2;
-                            cy2 = t;
-                        }
-                        if (cz1 > cz2) {
-                            zo += (cz2 - cz1);
-                            int t = cz1;
-                            cz1 = cz2;
-                            cz2 = t;
-                        }
-
-                        //itetate through selection
-                        int xi = cx1;
-                        do {
-                            int yi = cy1;
-                            do {
-                                int zi = cz1;
-                                do {
-
-                                    //Offsets are calculated. These offsets should be the same between the target and the destination
-                                    int dx = xi - cx1;
-                                    int dy = yi - cy1;
-                                    int dz = zi - cz1;
-
-                                    BlockPos oldPos = new BlockPos(cx1 + dx, cy1 + dy, cz1 + dz);
-                                    BlockPos newPos = new BlockPos(x + dx + xo, y + dy + yo, z + dz + zo);
-
-                                    if (world.isAirBlock(newPos)) {
-                                        Block block = world.getBlockState(oldPos).getBlock();
-                                        Item item = Item.getItemFromBlock(block);
-                                        int worldDmg = block.getMetaFromState(world.getBlockState(oldPos));
-                                        int dmg = block.damageDropped(world.getBlockState(oldPos));
-
-                                        boolean usesMetadataForPlacing = false;
-                                        List<ItemStack> drops = block.getDrops(world, oldPos, block.getStateFromMeta(dmg), 0);
-                                        if (drops.size() == 1) {
-                                            ItemStack dropStack = drops.get(0);
-                                            usesMetadataForPlacing = dropStack.getItem() == item && dropStack.getItemDamage() == 0 && worldDmg != 0;
-                                        }
-
-                                        if (player.capabilities.isCreativeMode) {
-                                            if (!world.isRemote) {
-                                                world.setBlockState(newPos, block.getStateFromMeta(worldDmg), 3);
-                                            }else{
-                                                particles(newPos);
-                                            }
-
-                                        } else if (player.inventory.hasItemStack(new ItemStack(item, 1, dmg))) {
-                                            int slot = slotOfItemStack(new ItemStack(item, 1, dmg), player.inventory);
-                                            if (item instanceof ItemBlock) {
-                                                if (!world.isRemote) {
-                                                    ((ItemBlock) item).placeBlockAt(player.inventory.getStackInSlot(slot), player, world, newPos, EnumFacing.DOWN, 0, 0, 0, ((ItemBlock) item).block.getStateFromMeta(dmg));
-                                                    if (usesMetadataForPlacing) {
-                                                        world.setBlockState(newPos, world.getBlockState(newPos).getBlock().getStateFromMeta(worldDmg), 3);
-                                                    }
-                                                }else{
-                                                    particles(newPos);
-                                                }
-
-                                                player.inventory.decrStackSize(slot, 1);
-                                            }
-                                        }
-                                    }
-
-                                    zi++;
-                                } while (zi <= cz2);
-                                yi++;
-                            } while (yi <= cy2);
-                            xi++;
-                        } while (xi <= cx2);
-
-                        if (!world.isRemote) {
-                            player.sendStatusMessage(new TextComponentString("Successfully pasted building"), false);
-                        }
-                    } else {
-                        if (!world.isRemote) {
-                            player.sendStatusMessage(new TextComponentString("Nothing copied"), false);
-                        }
-
-                    }
-                    break;
+							//xo, yo, zo were originally calculated relative to x1, y1, z1
+							//When we swap x1, we need to recalculate xo
+							//The players position when they copy-pasted = cx1 - xo
+							//New xo = newX1 - playerPos
+							//= cx2 - (cx1 - xo)
+							//= xo + (cx2 - cx1)
+							xo += (cx2 - cx1);
+							int t = cx1;
+							cx1 = cx2;
+							cx2 = t;
 
 
-            }
-        }
-        return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
-    }
+						}
 
-    public int roundToZero(double d) {
-        return (int) (d > 0 ? Math.floor(d) : Math.ceil(d));
+						if (cy1 > cy2) {
 
-    }
+							yo += (cy2 - cy1);
+							int t = cy1;
+							cy1 = cy2;
+							cy2 = t;
+						}
+						if (cz1 > cz2) {
+							zo += (cz2 - cz1);
+							int t = cz1;
+							cz1 = cz2;
+							cz2 = t;
+						}
 
-    private void particles(BlockPos pos) {
-        for (EnumFacing direction : EnumFacing.VALUES) {
-            for (int i = 0; i < 3; i++) {
-                Random random = new Random();
-                double x = pos.getX() + random.nextDouble();
-                double y = pos.getY() + random.nextDouble();
-                double z = pos.getZ() + random.nextDouble();
-                ParticleEffects.spawnParticle("witchMagic", x, y, z, 0, 0, 0, 0, 34, 264);
-            }
-        }
+						//itetate through selection
+						int xi = cx1;
+						do {
+							int yi = cy1;
+							do {
+								int zi = cz1;
+								do {
 
-    }
+									//Offsets are calculated. These offsets should be the same between the target and the destination
+									int dx = xi - cx1;
+									int dy = yi - cy1;
+									int dz = zi - cz1;
 
-    //Adapted from InventoryPlayer.hasItemStack
-    public int slotOfItemStack(ItemStack stack, InventoryPlayer inv) {
-        int i;
+									BlockPos oldPos = new BlockPos(cx1 + dx, cy1 + dy, cz1 + dz);
+									BlockPos newPos = new BlockPos(x + dx + xo, y + dy + yo, z + dz + zo);
 
-        for (i = 0; i < inv.mainInventory.size(); ++i) {
-            if (inv.mainInventory.get(i) != ItemStack.EMPTY && inv.mainInventory.get(i).isItemEqual(stack)) {
-                return i;
-            }
-        }
+									if (world.isAirBlock(newPos)) {
+										Block block = world.getBlockState(oldPos).getBlock();
+										Item item = Item.getItemFromBlock(block);
+										int worldDmg = block.getMetaFromState(world.getBlockState(oldPos));
+										int dmg = block.damageDropped(world.getBlockState(oldPos));
 
-        return -1;
-    }
+										boolean usesMetadataForPlacing = false;
+										List<ItemStack> drops = block.getDrops(world, oldPos, block.getStateFromMeta(dmg), 0);
+										if (drops.size() == 1) {
+											ItemStack dropStack = drops.get(0);
+											usesMetadataForPlacing = dropStack.getItem() == item && dropStack.getItemDamage() == 0 && worldDmg != 0;
+										}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+										if (player.capabilities.isCreativeMode) {
+											if (!world.isRemote) {
+												world.setBlockState(newPos, block.getStateFromMeta(worldDmg), 3);
+											} else {
+												particles(newPos);
+											}
 
-    @Override
-    public String getItemName() {
-        return "prismaticWand";
-    }
+										} else if (player.inventory.hasItemStack(new ItemStack(item, 1, dmg))) {
+											int slot = slotOfItemStack(new ItemStack(item, 1, dmg), player.inventory);
+											if (item instanceof ItemBlock) {
+												if (!world.isRemote) {
+													((ItemBlock) item).placeBlockAt(player.inventory.getStackInSlot(slot), player, world, newPos, EnumFacing.DOWN, 0, 0, 0, ((ItemBlock) item).block.getStateFromMeta(dmg));
+													if (usesMetadataForPlacing) {
+														world.setBlockState(newPos, world.getBlockState(newPos).getBlock().getStateFromMeta(worldDmg), 3);
+													}
+												} else {
+													particles(newPos);
+												}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+												player.inventory.decrStackSize(slot, 1);
+											}
+										}
+									}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+									zi++;
+								} while (zi <= cz2);
+								yi++;
+							} while (yi <= cy2);
+							xi++;
+						} while (xi <= cx2);
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), " P ", " I ", " I ", 'P', ItemMaterial.getPrism(), 'I', new ItemStack(Items.BLAZE_ROD));
-    }
+						if (!world.isRemote) {
+							player.sendStatusMessage(new TextComponentString("Successfully pasted building"), false);
+						}
+					} else {
+						if (!world.isRemote) {
+							player.sendStatusMessage(new TextComponentString("Nothing copied"), false);
+						}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -25;
-    }
+					}
+					break;
+
+
+			}
+		}
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
+	}
+
+	public int roundToZero(double d) {
+		return (int) (d > 0 ? Math.floor(d) : Math.ceil(d));
+
+	}
+
+	private void particles(BlockPos pos) {
+		for (EnumFacing direction : EnumFacing.VALUES) {
+			for (int i = 0; i < 3; i++) {
+				Random random = new Random();
+				double x = pos.getX() + random.nextDouble();
+				double y = pos.getY() + random.nextDouble();
+				double z = pos.getZ() + random.nextDouble();
+				ParticleEffects.spawnParticle("witchMagic", x, y, z, 0, 0, 0, 0, 34, 264);
+			}
+		}
+
+	}
+
+	//Adapted from InventoryPlayer.hasItemStack
+	public int slotOfItemStack(ItemStack stack, InventoryPlayer inv) {
+		int i;
+
+		for (i = 0; i < inv.mainInventory.size(); ++i) {
+			if (inv.mainInventory.get(i) != ItemStack.EMPTY && inv.mainInventory.get(i).isItemEqual(stack)) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
+
+	@Override
+	public String getItemName() {
+		return "prismaticWand";
+	}
+
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
+
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
+
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), " P ", " I ", " I ", 'P', ItemMaterial.getPrism(), 'I', new ItemStack(Items.BLAZE_ROD));
+	}
+
+	@Override
+	public int getCreativeTabPriority() {
+		return -25;
+	}
 }

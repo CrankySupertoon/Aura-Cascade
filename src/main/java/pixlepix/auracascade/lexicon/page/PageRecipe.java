@@ -2,11 +2,11 @@
  * This class was created by <Vazkii>. It's distributed as
  * part of the Botania Mod. Get the Source Code in github:
  * https://github.com/Vazkii/Botania
- *
+ * <p>
  * Botania is Open Source and distributed under a
  * Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License
  * (http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_GB)
- *
+ * <p>
  * File Created @ [Feb 8, 2014, 2:46:36 PM (GMT)]
  */
 package pixlepix.auracascade.lexicon.page;
@@ -32,146 +32,146 @@ import java.util.List;
 
 public class PageRecipe extends LexiconPage {
 
-    static boolean mouseDownLastTick = false;
-    int relativeMouseX, relativeMouseY;
-    ItemStack tooltipStack, tooltipContainerStack;
-    boolean tooltipEntry;
+	static boolean mouseDownLastTick = false;
+	int relativeMouseX, relativeMouseY;
+	ItemStack tooltipStack, tooltipContainerStack;
+	boolean tooltipEntry;
 
-    public PageRecipe(String unlocalizedName) {
-        super(unlocalizedName);
-    }
+	public PageRecipe(String unlocalizedName) {
+		super(unlocalizedName);
+	}
 
-    protected int getTextOffset(IGuiLexiconEntry gui) {
-        return gui.getHeight() - 40;
+	protected int getTextOffset(IGuiLexiconEntry gui) {
+		return gui.getHeight() - 40;
 
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderScreen(IGuiLexiconEntry gui, int mx, int my) {
-        relativeMouseX = mx;
-        relativeMouseY = my;
+	}
 
-        renderRecipe(gui, mx, my);
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderScreen(IGuiLexiconEntry gui, int mx, int my) {
+		relativeMouseX = mx;
+		relativeMouseY = my;
 
-        int width = gui.getWidth() - 30;
-        int x = gui.getLeft() + 16;
-        int y = gui.getTop() + getTextOffset(gui);
-        if (!I18n.translateToLocal(getUnlocalizedName()).equals(getUnlocalizedName())) {
-            PageText.renderText(x, y, width, getUnlocalizedName());
-        }
+		renderRecipe(gui, mx, my);
 
-        if (tooltipStack != null) {
-            List<String> tooltipData = tooltipStack.getTooltip(Minecraft.getMinecraft().player, false);
-            List<String> parsedTooltip = new ArrayList<>();
-            boolean first = true;
+		int width = gui.getWidth() - 30;
+		int x = gui.getLeft() + 16;
+		int y = gui.getTop() + getTextOffset(gui);
+		if (!I18n.translateToLocal(getUnlocalizedName()).equals(getUnlocalizedName())) {
+			PageText.renderText(x, y, width, getUnlocalizedName());
+		}
 
-            for (String s : tooltipData) {
-                String s_ = s;
-                if (!first)
-                    s_ = TextFormatting.GRAY + s;
-                parsedTooltip.add(s_);
-                first = false;
-            }
+		if (tooltipStack != null) {
+			List<String> tooltipData = tooltipStack.getTooltip(Minecraft.getMinecraft().player, false);
+			List<String> parsedTooltip = new ArrayList<>();
+			boolean first = true;
 
-            VazkiiRenderHelper.renderTooltip(mx, my, parsedTooltip);
+			for (String s : tooltipData) {
+				String s_ = s;
+				if (!first)
+					s_ = TextFormatting.GRAY + s;
+				parsedTooltip.add(s_);
+				first = false;
+			}
 
-            int tooltipY = 8 + tooltipData.size() * 11;
+			VazkiiRenderHelper.renderTooltip(mx, my, parsedTooltip);
 
-            if (tooltipEntry) {
-                VazkiiRenderHelper.renderTooltipOrange(mx, my + tooltipY, Collections.singletonList(TextFormatting.GRAY + I18n.translateToLocal("auramisc.clickToRecipe")));
-                tooltipY += 18;
-            }
+			int tooltipY = 8 + tooltipData.size() * 11;
 
-            if (tooltipContainerStack != null)
-                VazkiiRenderHelper.renderTooltipGreen(mx, my + tooltipY, Arrays.asList(TextFormatting.AQUA + I18n.translateToLocal("auramisc.craftingContainer"), tooltipContainerStack.getDisplayName()));
-        }
+			if (tooltipEntry) {
+				VazkiiRenderHelper.renderTooltipOrange(mx, my + tooltipY, Collections.singletonList(TextFormatting.GRAY + I18n.translateToLocal("auramisc.clickToRecipe")));
+				tooltipY += 18;
+			}
 
-        tooltipStack = tooltipContainerStack = null;
-        tooltipEntry = false;
-        GlStateManager.disableBlend();
-        mouseDownLastTick = Mouse.isButtonDown(0);
-    }
+			if (tooltipContainerStack != null)
+				VazkiiRenderHelper.renderTooltipGreen(mx, my + tooltipY, Arrays.asList(TextFormatting.AQUA + I18n.translateToLocal("auramisc.craftingContainer"), tooltipContainerStack.getDisplayName()));
+		}
 
-    @SideOnly(Side.CLIENT)
-    public void renderRecipe(IGuiLexiconEntry gui, int mx, int my) {
-        // NO-OP
-    }
+		tooltipStack = tooltipContainerStack = null;
+		tooltipEntry = false;
+		GlStateManager.disableBlend();
+		mouseDownLastTick = Mouse.isButtonDown(0);
+	}
 
-    @SideOnly(Side.CLIENT)
-    public void renderItemAtAngle(IGuiLexiconEntry gui, int angle, ItemStack stack) {
-        if (stack == null || stack.getItem() == null)
-            return;
+	@SideOnly(Side.CLIENT)
+	public void renderRecipe(IGuiLexiconEntry gui, int mx, int my) {
+		// NO-OP
+	}
 
-        ItemStack workStack = stack.copy();
+	@SideOnly(Side.CLIENT)
+	public void renderItemAtAngle(IGuiLexiconEntry gui, int angle, ItemStack stack) {
+		if (stack == null || stack.getItem() == null)
+			return;
 
-        if (workStack.getItemDamage() == Short.MAX_VALUE || workStack.getItemDamage() == -1)
-            workStack.setItemDamage(0);
+		ItemStack workStack = stack.copy();
 
-        angle -= 90;
-        int radius = 32;
-        double xPos = gui.getLeft() + Math.cos(angle * Math.PI / 180D) * radius + gui.getWidth() / 2 - 8;
-        double yPos = gui.getTop() + Math.sin(angle * Math.PI / 180D) * radius + 53;
+		if (workStack.getItemDamage() == Short.MAX_VALUE || workStack.getItemDamage() == -1)
+			workStack.setItemDamage(0);
 
-        renderItem(gui, (int) xPos, (int) yPos, workStack, false);
-    }
+		angle -= 90;
+		int radius = 32;
+		double xPos = gui.getLeft() + Math.cos(angle * Math.PI / 180D) * radius + gui.getWidth() / 2 - 8;
+		double yPos = gui.getTop() + Math.sin(angle * Math.PI / 180D) * radius + 53;
 
-    @SideOnly(Side.CLIENT)
-    public void renderItemAtGridPos(IGuiLexiconEntry gui, int x, int y, ItemStack stack, boolean accountForContainer) {
-        if (stack == null || stack.getItem() == null)
-            return;
-        stack = stack.copy();
+		renderItem(gui, (int) xPos, (int) yPos, workStack, false);
+	}
 
-        if (stack.getItemDamage() == Short.MAX_VALUE)
-            stack.setItemDamage(0);
+	@SideOnly(Side.CLIENT)
+	public void renderItemAtGridPos(IGuiLexiconEntry gui, int x, int y, ItemStack stack, boolean accountForContainer) {
+		if (stack == null || stack.getItem() == null)
+			return;
+		stack = stack.copy();
 
-        int xPos = gui.getLeft() + x * 29 + 7 + (y == 0 && x == 3 ? 10 : 0);
-        int yPos = gui.getTop() + y * 29 + 24 - (y == 0 ? 7 : 0);
-        ItemStack stack1 = stack.copy();
-        if (stack1.getItemDamage() == -1)
-            stack1.setItemDamage(0);
+		if (stack.getItemDamage() == Short.MAX_VALUE)
+			stack.setItemDamage(0);
 
-        renderItem(gui, xPos, yPos, stack1, accountForContainer);
-    }
+		int xPos = gui.getLeft() + x * 29 + 7 + (y == 0 && x == 3 ? 10 : 0);
+		int yPos = gui.getTop() + y * 29 + 24 - (y == 0 ? 7 : 0);
+		ItemStack stack1 = stack.copy();
+		if (stack1.getItemDamage() == -1)
+			stack1.setItemDamage(0);
 
-    @SideOnly(Side.CLIENT)
-    public void renderItem(IGuiLexiconEntry gui, int xPos, int yPos, ItemStack stack, boolean accountForContainer) {
-        RenderItem render = Minecraft.getMinecraft().getRenderItem();
-        boolean mouseDown = Mouse.isButtonDown(0);
+		renderItem(gui, xPos, yPos, stack1, accountForContainer);
+	}
 
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        RenderHelper.enableGUIStandardItemLighting();
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.enableDepth();
-        render.renderItemAndEffectIntoGUI(stack, xPos, yPos);
-        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRendererObj, stack, xPos, yPos, "");
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.popMatrix();
+	@SideOnly(Side.CLIENT)
+	public void renderItem(IGuiLexiconEntry gui, int xPos, int yPos, ItemStack stack, boolean accountForContainer) {
+		RenderItem render = Minecraft.getMinecraft().getRenderItem();
+		boolean mouseDown = Mouse.isButtonDown(0);
 
-        if (relativeMouseX >= xPos && relativeMouseY >= yPos && relativeMouseX <= xPos + 16 && relativeMouseY <= yPos + 16) {
-            tooltipStack = stack;
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderHelper.enableGUIStandardItemLighting();
+		GlStateManager.enableRescaleNormal();
+		GlStateManager.enableDepth();
+		render.renderItemAndEffectIntoGUI(stack, xPos, yPos);
+		render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRendererObj, stack, xPos, yPos, "");
+		RenderHelper.disableStandardItemLighting();
+		GlStateManager.popMatrix();
 
-            LexiconRecipeMappings.EntryData data = LexiconRecipeMappings.getDataForStack(tooltipStack);
-            if (data != null && (data.entry != gui.getEntry() || data.page != gui.getPageOn())) {
-                tooltipEntry = true;
+		if (relativeMouseX >= xPos && relativeMouseY >= yPos && relativeMouseX <= xPos + 16 && relativeMouseY <= yPos + 16) {
+			tooltipStack = stack;
 
-                if (!mouseDownLastTick && mouseDown && GuiScreen.isShiftKeyDown()) {
-                    GuiLexiconEntry newGui = new GuiLexiconEntry(data.entry, (GuiScreen) gui);
-                    newGui.page = data.page;
-                    Minecraft.getMinecraft().displayGuiScreen(newGui);
-                }
-            } else tooltipEntry = false;
+			LexiconRecipeMappings.EntryData data = LexiconRecipeMappings.getDataForStack(tooltipStack);
+			if (data != null && (data.entry != gui.getEntry() || data.page != gui.getPageOn())) {
+				tooltipEntry = true;
 
-            if (accountForContainer) {
-                ItemStack containerStack = stack.getItem().getContainerItem(stack);
-                if (!containerStack.isEmpty())
-                    tooltipContainerStack = containerStack;
-            }
-        }
+				if (!mouseDownLastTick && mouseDown && GuiScreen.isShiftKeyDown()) {
+					GuiLexiconEntry newGui = new GuiLexiconEntry(data.entry, (GuiScreen) gui);
+					newGui.page = data.page;
+					Minecraft.getMinecraft().displayGuiScreen(newGui);
+				}
+			} else tooltipEntry = false;
 
-        GlStateManager.disableLighting();
-    }
+			if (accountForContainer) {
+				ItemStack containerStack = stack.getItem().getContainerItem(stack);
+				if (!containerStack.isEmpty())
+					tooltipContainerStack = containerStack;
+			}
+		}
+
+		GlStateManager.disableLighting();
+	}
 
 }

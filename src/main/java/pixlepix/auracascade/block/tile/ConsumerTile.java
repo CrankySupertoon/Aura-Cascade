@@ -9,7 +9,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import pixlepix.auracascade.block.BlockMonitor;
-import pixlepix.auracascade.data.EnumRainbowColor;
 import pixlepix.auracascade.main.AuraUtil;
 
 /**
@@ -17,133 +16,133 @@ import pixlepix.auracascade.main.AuraUtil;
  */
 public abstract class ConsumerTile extends TileEntity implements ITickable {
 
-    public int storedPower;
-    public int lastPower;
-    public int progress;
-    private boolean lastValidState;
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-
-        super.readFromNBT(nbt);
-        readCustomNBT(nbt);
-    }
-
-    public abstract int getMaxProgress();
-
-    public abstract int getPowerPerProgress();
-
-    public void readCustomNBT(NBTTagCompound nbt) {
-        progress = nbt.getInteger("progress");
-        storedPower = nbt.getInteger("storedPower");
-        lastPower = nbt.getInteger("lastPower");
-    }
-
-    public abstract boolean validItemsNearby();
-
-    public void writeCustomNBT(NBTTagCompound nbt) {
-        nbt.setInteger("progress", progress);
-        nbt.setInteger("storedPower", storedPower);
-        nbt.setInteger("lastPower", lastPower);
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        writeCustomNBT(nbt);
-        return nbt;
-    }
+	public int storedPower;
+	public int lastPower;
+	public int progress;
+	private boolean lastValidState;
 
 	@Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        writeCustomNBT(nbt);
-        return new SPacketUpdateTileEntity(getPos(), -999, nbt);
-    }
+	public void readFromNBT(NBTTagCompound nbt) {
 
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        readCustomNBT(pkt.getNbtCompound());
-    }
+		super.readFromNBT(nbt);
+		readCustomNBT(nbt);
+	}
 
-    public void updateMonitor() {
-        for (EnumFacing d1 : EnumFacing.VALUES) {
-            Block b = world.getBlockState(getPos().offset(d1)).getBlock();
-            if (b instanceof BlockMonitor) {
+	public abstract int getMaxProgress();
 
-                for (EnumFacing d2 : EnumFacing.VALUES) {
-                    BlockPos pos = getPos().offset(d2).offset(d1);
-                    Block b2 = world.getBlockState(pos).getBlock();
-                    b2.onNeighborChange(world, pos, getPos());
-                }
-            }
-        }
-    }
+	public abstract int getPowerPerProgress();
 
-    @Override
-    public void update() {
-        if (!world.isRemote) {
-            if (world.getTotalWorldTime() % 20 == 18) {
-                storedPower *= .25;
-            }
+	public void readCustomNBT(NBTTagCompound nbt) {
+		progress = nbt.getInteger("progress");
+		storedPower = nbt.getInteger("storedPower");
+		lastPower = nbt.getInteger("lastPower");
+	}
 
-            if (world.getTotalWorldTime() % 20 == 0) {
-                if (lastValidState != validItemsNearby()) {
-                    lastValidState = !lastValidState;
-                    updateMonitor();
-                }
-            }
+	public abstract boolean validItemsNearby();
 
-            boolean changeLastPower = false;
-            //Drain energy from color Nodes
-            for (EnumFacing direction : EnumFacing.VALUES) {
-                TileEntity tileEntity = world.getTileEntity(getPos().offset(direction));
-                if (tileEntity instanceof AuraTile) {
-                    AuraTile auraTile = (AuraTile) tileEntity;
-                    if (auraTile.energy > 0) {
-                        auraTile.burst(getPos(), "magicCrit");
-                        storedPower += auraTile.energy;
-                        auraTile.energy = 0;
-                        changeLastPower = true;
-                    }
-                }
-            }
-            if (world.getTotalWorldTime() % 20 == 0) {
-                lastPower = 0;
-            }
-            if (changeLastPower) {
-                lastPower = storedPower;
-                markDirty();
-            } else if (world.getTotalWorldTime() % 20 == 2) {
-            	markDirty();
-            }
+	public void writeCustomNBT(NBTTagCompound nbt) {
+		nbt.setInteger("progress", progress);
+		nbt.setInteger("storedPower", storedPower);
+		nbt.setInteger("lastPower", lastPower);
+	}
 
-            if (world.getTotalWorldTime() % 500 == 0) {
-                AuraUtil.keepAlive(this, 3);
-            }
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		writeCustomNBT(nbt);
+		return nbt;
+	}
 
-            if (world.getTotalWorldTime() % 20 == 1 || world.getTotalWorldTime() % 20 == 2) {
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		writeCustomNBT(nbt);
+		return new SPacketUpdateTileEntity(getPos(), -999, nbt);
+	}
 
-                int nextBoostCost = getPowerPerProgress();
-                while (true) {
-                    if (progress > getMaxProgress()) {
-                        progress = 0;
-                        onUsePower();
-                        markDirty();
-                    }
-                    if (storedPower < nextBoostCost) {
-                        break;
-                    }
-                    progress += 1;
-                    storedPower -= nextBoostCost;
-                    nextBoostCost *= 2;
-                    markDirty();
-                   // world.notifyBlockOfStateChange(getPos(), world.getBlockState(pos).getBlock());
-                    world.markAndNotifyBlock(this.pos, this.world.getChunkFromBlockCoords(this.pos),this.blockType.getDefaultState(), this.blockType.getDefaultState(), 2);
-                }
-            }
-        }
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		readCustomNBT(pkt.getNbtCompound());
+	}
 
-    public abstract void onUsePower();
+	public void updateMonitor() {
+		for (EnumFacing d1 : EnumFacing.VALUES) {
+			Block b = world.getBlockState(getPos().offset(d1)).getBlock();
+			if (b instanceof BlockMonitor) {
+
+				for (EnumFacing d2 : EnumFacing.VALUES) {
+					BlockPos pos = getPos().offset(d2).offset(d1);
+					Block b2 = world.getBlockState(pos).getBlock();
+					b2.onNeighborChange(world, pos, getPos());
+				}
+			}
+		}
+	}
+
+	@Override
+	public void update() {
+		if (!world.isRemote) {
+			if (world.getTotalWorldTime() % 20 == 18) {
+				storedPower *= .25;
+			}
+
+			if (world.getTotalWorldTime() % 20 == 0) {
+				if (lastValidState != validItemsNearby()) {
+					lastValidState = !lastValidState;
+					updateMonitor();
+				}
+			}
+
+			boolean changeLastPower = false;
+			//Drain energy from color Nodes
+			for (EnumFacing direction : EnumFacing.VALUES) {
+				TileEntity tileEntity = world.getTileEntity(getPos().offset(direction));
+				if (tileEntity instanceof AuraTile) {
+					AuraTile auraTile = (AuraTile) tileEntity;
+					if (auraTile.energy > 0) {
+						auraTile.burst(getPos(), "magicCrit");
+						storedPower += auraTile.energy;
+						auraTile.energy = 0;
+						changeLastPower = true;
+					}
+				}
+			}
+			if (world.getTotalWorldTime() % 20 == 0) {
+				lastPower = 0;
+			}
+			if (changeLastPower) {
+				lastPower = storedPower;
+				markDirty();
+			} else if (world.getTotalWorldTime() % 20 == 2) {
+				markDirty();
+			}
+
+			if (world.getTotalWorldTime() % 500 == 0) {
+				AuraUtil.keepAlive(this, 3);
+			}
+
+			if (world.getTotalWorldTime() % 20 == 1 || world.getTotalWorldTime() % 20 == 2) {
+
+				int nextBoostCost = getPowerPerProgress();
+				while (true) {
+					if (progress > getMaxProgress()) {
+						progress = 0;
+						onUsePower();
+						markDirty();
+					}
+					if (storedPower < nextBoostCost) {
+						break;
+					}
+					progress += 1;
+					storedPower -= nextBoostCost;
+					nextBoostCost *= 2;
+					markDirty();
+					// world.notifyBlockOfStateChange(getPos(), world.getBlockState(pos).getBlock());
+					world.markAndNotifyBlock(this.pos, this.world.getChunkFromBlockCoords(this.pos), this.blockType.getDefaultState(), this.blockType.getDefaultState(), 2);
+				}
+			}
+		}
+	}
+
+	public abstract void onUsePower();
 }

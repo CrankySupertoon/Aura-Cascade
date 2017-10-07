@@ -21,84 +21,84 @@ import java.util.HashMap;
  */
 public class ItemTransmutingSword extends Item implements ITTinkererItem {
 
-    public HashMap<Class<? extends Entity>, Class<? extends Entity>> entityMap = new HashMap<Class<? extends Entity>, Class<? extends Entity>>();
+	public HashMap<Class<? extends Entity>, Class<? extends Entity>> entityMap = new HashMap<Class<? extends Entity>, Class<? extends Entity>>();
 
-    {
-        entityMap.put(EntityCow.class, EntityMooshroom.class);
-        entityMap.put(EntitySheep.class, EntityPig.class);
-        entityMap.put(EntityGhast.class, EntityBlaze.class);
-        entityMap.put(EntityMagmaCube.class, EntitySlime.class);
-        entityMap.put(EntityOcelot.class, EntityWolf.class);
-        entityMap.put(EntityCreeper.class, EntityEnderman.class);
+	{
+		entityMap.put(EntityCow.class, EntityMooshroom.class);
+		entityMap.put(EntitySheep.class, EntityPig.class);
+		entityMap.put(EntityGhast.class, EntityBlaze.class);
+		entityMap.put(EntityMagmaCube.class, EntitySlime.class);
+		entityMap.put(EntityOcelot.class, EntityWolf.class);
+		entityMap.put(EntityCreeper.class, EntityEnderman.class);
 
-        //Backwards
+		//Backwards
 
-        entityMap.put(EntityMooshroom.class, EntityCow.class);
-        entityMap.put(EntityPig.class, EntitySheep.class);
-        entityMap.put(EntityBlaze.class, EntityGhast.class);
-        entityMap.put(EntitySlime.class, EntityMagmaCube.class);
-        entityMap.put(EntityWolf.class, EntityOcelot.class);
-        entityMap.put(EntityEnderman.class, EntityCreeper.class);
-    }
+		entityMap.put(EntityMooshroom.class, EntityCow.class);
+		entityMap.put(EntityPig.class, EntitySheep.class);
+		entityMap.put(EntityBlaze.class, EntityGhast.class);
+		entityMap.put(EntitySlime.class, EntityMagmaCube.class);
+		entityMap.put(EntityWolf.class, EntityOcelot.class);
+		entityMap.put(EntityEnderman.class, EntityCreeper.class);
+	}
 
-    public ItemTransmutingSword() {
-        super();
-        setMaxStackSize(1);
-    }
+	public ItemTransmutingSword() {
+		super();
+		setMaxStackSize(1);
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -50;
-    }
+	@Override
+	public int getCreativeTabPriority() {
+		return -50;
+	}
 
-    @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        if (!target.world.isRemote) if (entityMap.get(target.getClass()) != null && target.getHealth() > 0) {
-            target.setDead();
-            Class<? extends Entity> clazz = entityMap.get(target.getClass());
-            Entity newEntity = null;
-            try {
-                newEntity = clazz.getConstructor(World.class).newInstance(target.world);
-                newEntity.setPosition(target.posX, target.posY, target.posZ);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
-            }
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		if (!target.world.isRemote) if (entityMap.get(target.getClass()) != null && target.getHealth() > 0) {
+			target.setDead();
+			Class<? extends Entity> clazz = entityMap.get(target.getClass());
+			Entity newEntity = null;
+			try {
+				newEntity = clazz.getConstructor(World.class).newInstance(target.world);
+				newEntity.setPosition(target.posX, target.posY, target.posZ);
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				e.printStackTrace();
+			}
 
-            target.world.spawnEntity(newEntity);
-            if (newEntity instanceof EntitySlime && target instanceof EntitySlime) {
-                // ((EntitySlime) newEntity).setSlimeSize((((EntitySlime) target).getSlimeSize()));
-                //TODO: This requires ASM, and seems fairly pointless.
-            }
-            if (newEntity instanceof EntityLivingBase) {
-                ((EntityLivingBase) newEntity).setHealth(Math.min(((EntityLivingBase) newEntity).getMaxHealth(), target.getHealth()));
+			target.world.spawnEntity(newEntity);
+			if (newEntity instanceof EntitySlime && target instanceof EntitySlime) {
+				// ((EntitySlime) newEntity).setSlimeSize((((EntitySlime) target).getSlimeSize()));
+				//TODO: This requires ASM, and seems fairly pointless.
+			}
+			if (newEntity instanceof EntityLivingBase) {
+				((EntityLivingBase) newEntity).setHealth(Math.min(((EntityLivingBase) newEntity).getMaxHealth(), target.getHealth()));
 
-            }
-        }
-        return super.hitEntity(stack, attacker, target);
-    }
+			}
+		}
+		return super.hitEntity(stack, attacker, target);
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public String getItemName() {
-        return "transmutingSword";
-    }
+	@Override
+	public String getItemName() {
+		return "transmutingSword";
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), " I ", " I ", " G ", 'I', ItemMaterial.getIngot(EnumRainbowColor.VIOLET), 'G', ItemMaterial.getGem(EnumRainbowColor.VIOLET));
-    }
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), " I ", " I ", " G ", 'I', ItemMaterial.getIngot(EnumRainbowColor.VIOLET), 'G', ItemMaterial.getGem(EnumRainbowColor.VIOLET));
+	}
 }

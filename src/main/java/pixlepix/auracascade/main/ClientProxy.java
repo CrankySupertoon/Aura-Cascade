@@ -26,79 +26,80 @@ import pixlepix.auracascade.render.RenderPedestal;
 public class ClientProxy extends CommonProxy {
 
 
-    @Override
-    public World getWorld() {
-        return Minecraft.getMinecraft().world;
-    }
+	@Override
+	public World getWorld() {
+		return Minecraft.getMinecraft().world;
+	}
 
-    @Override
-    public void preInit(FMLPreInitializationEvent evt) {
-        super.preInit(evt);
-        ModelHandler.registerModels();
-    }
+	@Override
+	public void preInit(FMLPreInitializationEvent evt) {
+		super.preInit(evt);
+		ModelHandler.registerModels();
+	}
 
-    @Override
-    public void init(FMLInitializationEvent event) {
-        super.init(event);
-        MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
-        MinecraftForge.EVENT_BUS.register(new OverlayRender());
+	@Override
+	public void init(FMLInitializationEvent event) {
+		super.init(event);
+		MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
+		MinecraftForge.EVENT_BUS.register(new OverlayRender());
 
-        KeyBindings.init();
+		KeyBindings.init();
 
-        ClientEventHandler clientEventHandler = new ClientEventHandler();
-        MinecraftForge.EVENT_BUS.register(clientEventHandler);
-
-
-    }
-    @Override
-    public void addToTutorial(LexiconEntry entry) {
-
-        GuiLexicon.tutorialMaster.add(entry);
-    }
-
-    @Override
-    public void postInit(FMLPostInitializationEvent event) {
-        super.postInit(event);
-        ClientRegistry.bindTileEntitySpecialRenderer(AuraTilePedestal.class, new RenderPedestal());
-        RenderingRegistry.registerEntityRenderingHandler(EntityFairy.class, new RenderEntityFairy(Minecraft.getMinecraft().getRenderManager()));
-    }
-
-    @Override
-    public EntityPlayer getPlayer() {
-        return Minecraft.getMinecraft().player;
-    }
-
-    @Override
-    public ParticleManager getEffectRenderer() {
-        return Minecraft.getMinecraft().effectRenderer;
-    }
+		ClientEventHandler clientEventHandler = new ClientEventHandler();
+		MinecraftForge.EVENT_BUS.register(clientEventHandler);
 
 
-    @Override
-    public void setEntryToOpen(LexiconEntry entry) {
-        GuiLexicon.currentOpenLexicon = new GuiLexiconEntry(entry, new GuiLexiconIndex(entry.category));
-    }
+	}
+
+	@Override
+	public void addToTutorial(LexiconEntry entry) {
+
+		GuiLexicon.tutorialMaster.add(entry);
+	}
+
+	@Override
+	public void postInit(FMLPostInitializationEvent event) {
+		super.postInit(event);
+		ClientRegistry.bindTileEntitySpecialRenderer(AuraTilePedestal.class, new RenderPedestal());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFairy.class, new RenderEntityFairy(Minecraft.getMinecraft().getRenderManager()));
+	}
+
+	@Override
+	public EntityPlayer getPlayer() {
+		return Minecraft.getMinecraft().player;
+	}
+
+	@Override
+	public ParticleManager getEffectRenderer() {
+		return Minecraft.getMinecraft().effectRenderer;
+	}
 
 
-    public void addBlockDestroyEffects(BlockPos pos) {
-        Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, Minecraft.getMinecraft().world.getBlockState(pos));
-    }
+	@Override
+	public void setEntryToOpen(LexiconEntry entry) {
+		GuiLexicon.currentOpenLexicon = new GuiLexiconEntry(entry, new GuiLexiconIndex(entry.category));
+	}
 
-    @Override
-    public void setLexiconStack(ItemStack stack) {
-        GuiLexicon.stackUsed = stack;
-    }
 
-    @Override
-    public void addEffectBypassingLimit(Particle entityFX) {
-        //if (Config.overrideMaxParticleLimit) {
-        if(true){
-         //  Minecraft.getMinecraft().effectRenderer.fxLayers[entityFX.getFXLayer()][entityFX.particleAlpha != 1 ? 0 : 1].add(entityFX);
-          //  Minecraft.getMinecraft().effectRenderer.fxLayers[entityFX.getFXLayer()][entityFX.particleAlpha != 1 ? 0 : 1].add(entityFX);
-            Minecraft.getMinecraft().effectRenderer.addEffect(entityFX);
-        } else {
-        	//TODO Fix the alternative to the config.
-             //Minecraft.getMinecraft().theWorld.spawnEntity(entityFX);
-        }
-    }
+	public void addBlockDestroyEffects(BlockPos pos) {
+		Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, Minecraft.getMinecraft().world.getBlockState(pos));
+	}
+
+	@Override
+	public void setLexiconStack(ItemStack stack) {
+		GuiLexicon.stackUsed = stack;
+	}
+
+	@Override
+	public void addEffectBypassingLimit(Particle entityFX) {
+		//if (Config.overrideMaxParticleLimit) {
+		if (true) {
+			//  Minecraft.getMinecraft().effectRenderer.fxLayers[entityFX.getFXLayer()][entityFX.particleAlpha != 1 ? 0 : 1].add(entityFX);
+			//  Minecraft.getMinecraft().effectRenderer.fxLayers[entityFX.getFXLayer()][entityFX.particleAlpha != 1 ? 0 : 1].add(entityFX);
+			Minecraft.getMinecraft().effectRenderer.addEffect(entityFX);
+		} else {
+			//TODO Fix the alternative to the config.
+			//Minecraft.getMinecraft().theWorld.spawnEntity(entityFX);
+		}
+	}
 }

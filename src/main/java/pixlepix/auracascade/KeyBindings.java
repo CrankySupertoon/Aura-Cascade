@@ -9,13 +9,13 @@ import org.lwjgl.input.Keyboard;
  */
 public class KeyBindings {
 
-    public static KeyBinding jumpKeyBind;
-    public static KeyBinding jumpDownKeyBind;
+	public static KeyBinding jumpKeyBind;
+	public static KeyBinding jumpDownKeyBind;
 
-    public static void init() {
-        jumpKeyBind = new KeyBinding("aura.angelJump", Keyboard.KEY_UP, "keyBindCategory");
-        jumpDownKeyBind = new KeyBinding("aura.angelJumpDown", Keyboard.KEY_DOWN, "keyBindCategory");
-        ClientRegistry.registerKeyBinding(jumpKeyBind);
-        ClientRegistry.registerKeyBinding(jumpDownKeyBind);
-    }
+	public static void init() {
+		jumpKeyBind = new KeyBinding("aura.angelJump", Keyboard.KEY_UP, "keyBindCategory");
+		jumpDownKeyBind = new KeyBinding("aura.angelJumpDown", Keyboard.KEY_DOWN, "keyBindCategory");
+		ClientRegistry.registerKeyBinding(jumpKeyBind);
+		ClientRegistry.registerKeyBinding(jumpDownKeyBind);
+	}
 }

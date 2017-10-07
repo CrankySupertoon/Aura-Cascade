@@ -22,52 +22,52 @@ import java.util.ArrayList;
  */
 public class ItemAuraCrystal extends Item implements ITTinkererItem {
 
-    public static final String name = "whiteCrystal";
+	public static final String name = "whiteCrystal";
 
-    @Override
-    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand){
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof AuraTile) {
-            player.getHeldItem(hand).shrink(1);
-            ((AuraTile) te).storage += 1000;
-        }
-        //Changing anything to fail literally breaks all of it.
-        return EnumActionResult.PASS;
-    }
+	@Override
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof AuraTile) {
+			player.getHeldItem(hand).shrink(1);
+			((AuraTile) te).storage += 1000;
+		}
+		//Changing anything to fail literally breaks all of it.
+		return EnumActionResult.PASS;
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public String getItemName() {
-        return name;
-    }
+	@Override
+	public String getItemName() {
+		return name;
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    @Override
-    public boolean getHasSubtypes() {
-        return true;
-    }
+	@Override
+	public boolean getHasSubtypes() {
+		return true;
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
 
-        return new OreCraftingBenchRecipe(new ItemStack(this, 2, 0), "GGG", "GDG", "GGG", 'D', new ItemStack(Items.IRON_INGOT), 'G', new ItemStack(Items.GOLD_NUGGET));
-    }
+		return new OreCraftingBenchRecipe(new ItemStack(this, 2, 0), "GGG", "GDG", "GGG", 'D', new ItemStack(Items.IRON_INGOT), 'G', new ItemStack(Items.GOLD_NUGGET));
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return 74;
-    }
+	@Override
+	public int getCreativeTabPriority() {
+		return 74;
+	}
 }

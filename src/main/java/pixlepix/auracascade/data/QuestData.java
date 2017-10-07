@@ -12,33 +12,33 @@ import java.util.ArrayList;
 /**
  * Created by localmacaccount on 5/31/15.
  */
-public class QuestData implements Capability.IStorage<QuestData>{
+public class QuestData implements Capability.IStorage<QuestData> {
 	//TODO Fix QuestData
 
-    public final static String EXT_PROP_NAME = "ACQuest";
-    public ArrayList<Quest> completedQuests = new ArrayList<Quest>();
+	public final static String EXT_PROP_NAME = "ACQuest";
+	public ArrayList<Quest> completedQuests = new ArrayList<Quest>();
 
-    public QuestData(ArrayList<Quest> completedQuests) {
-        this.completedQuests = completedQuests;
-    }
+	public QuestData(ArrayList<Quest> completedQuests) {
+		this.completedQuests = completedQuests;
+	}
 
-    public QuestData() {
-        this(new ArrayList<Quest>());
-    }
+	public QuestData() {
+		this(new ArrayList<Quest>());
+	}
 
-    public static void register(EntityPlayer player) {
-       // player.registerExtendedProperties(QuestData.EXT_PROP_NAME, new QuestData());
-     //   player.capabilities.writeCapabilitiesToNBT(tagCompound);
-    }
+	public static void register(EntityPlayer player) {
+		// player.registerExtendedProperties(QuestData.EXT_PROP_NAME, new QuestData());
+		//   player.capabilities.writeCapabilitiesToNBT(tagCompound);
+	}
 
-    /**
-     * Called when the entity that this class is attached to is saved.
-     * Any custom entity data  that needs saving should be saved here.
-     *
-     * @param compound The compound to save to.
-     */
-    /*
-    @Override
+	/**
+	 * Called when the entity that this class is attached to is saved.
+	 * Any custom entity data  that needs saving should be saved here.
+	 *
+	 * @param compound The compound to save to.
+	 */
+	/*
+	@Override
     public void saveNBTData(NBTTagCompound compound) {
         NBTTagCompound properties = new NBTTagCompound();
         int[] questIds = new int[completedQuests.size()];
@@ -66,20 +66,21 @@ public class QuestData implements Capability.IStorage<QuestData>{
         }
     }
     */
-    /**
-     * Used to initialize the extended properties with the entity that this is attached to, as well
-     * as the world object.
-     * Called automatically if you register with the EntityConstructing event.
-     * May be called multiple times if the extended properties is moved over to a new entity.
-     * Such as when a player switches dimension {Minecraft re-creates the player entity}
-     *
-     * @param entity The entity that this extended properties is attached to
-     * @param world  The world in which the entity exists
-     */
-    
-    public void init(Entity entity, World world) {
 
-    }
+	/**
+	 * Used to initialize the extended properties with the entity that this is attached to, as well
+	 * as the world object.
+	 * Called automatically if you register with the EntityConstructing event.
+	 * May be called multiple times if the extended properties is moved over to a new entity.
+	 * Such as when a player switches dimension {Minecraft re-creates the player entity}
+	 *
+	 * @param entity The entity that this extended properties is attached to
+	 * @param world  The world in which the entity exists
+	 */
+
+	public void init(Entity entity, World world) {
+
+	}
 
 	@Override
 	public NBTBase writeNBT(Capability<QuestData> capability, QuestData instance, EnumFacing side) {
@@ -88,6 +89,6 @@ public class QuestData implements Capability.IStorage<QuestData>{
 
 	@Override
 	public void readNBT(Capability<QuestData> capability, QuestData instance, EnumFacing side, NBTBase nbt) {
-		
+
 	}
 }

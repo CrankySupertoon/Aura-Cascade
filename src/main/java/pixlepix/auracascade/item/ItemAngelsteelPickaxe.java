@@ -23,78 +23,78 @@ import java.util.List;
  * Created by pixlepix on 12/21/14.
  */
 public class ItemAngelsteelPickaxe extends ItemPickaxe implements ITTinkererItem, IAngelsteelTool {
-    public static final String name = "angelsteelPickaxe";
-    public int degree = 0;
+	public static final String name = "angelsteelPickaxe";
+	public int degree = 0;
 
-    public ItemAngelsteelPickaxe(Integer i) {
-        super(AngelsteelToolHelper.materials[i]);
-        this.degree = i;
+	public ItemAngelsteelPickaxe(Integer i) {
+		super(AngelsteelToolHelper.materials[i]);
+		this.degree = i;
 
-        setCreativeTab(null);
-    }
+		setCreativeTab(null);
+	}
 
-    public ItemAngelsteelPickaxe() {
-        this(0);
-    }
+	public ItemAngelsteelPickaxe() {
+		this(0);
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return AngelsteelToolHelper.getDegreeList();
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return AngelsteelToolHelper.getDegreeList();
+	}
 
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean p_77624_4_) {
-        super.addInformation(stack, player, list, p_77624_4_);
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean p_77624_4_) {
+		super.addInformation(stack, player, list, p_77624_4_);
 
-        AuraUtil.addAngelsteelDesc(list, stack);
-    }
+		AuraUtil.addAngelsteelDesc(list, stack);
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -5;
-    }
+	@Override
+	public int getCreativeTabPriority() {
+		return -5;
+	}
 
-    @Override
-    public String getItemName() {
-        return name + degree;
-    }
+	@Override
+	public String getItemName() {
+		return name + degree;
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return degree == 0 || degree == AngelsteelToolHelper.MAX_DEGREE;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return degree == 0 || degree == AngelsteelToolHelper.MAX_DEGREE;
+	}
 
-    @Override
-    public void onUpdate(ItemStack stack, World world, Entity entity, int p_77663_4_, boolean p_77663_5_) {
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int p_77663_4_, boolean p_77663_5_) {
 
-        if (!world.isRemote && stack.getTagCompound() == null) {
-            stack.setTagCompound(AngelsteelToolHelper.getRandomBuffCompound(degree));
-        }
-        super.onUpdate(stack, world, entity, p_77663_4_, p_77663_5_);
-    }
+		if (!world.isRemote && stack.getTagCompound() == null) {
+			stack.setTagCompound(AngelsteelToolHelper.getRandomBuffCompound(degree));
+		}
+		super.onUpdate(stack, world, entity, p_77663_4_, p_77663_5_);
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this, 1, 0), "AAA", " S ", " S ", 'A', new ItemStack(BlockRegistry.getFirstItemFromClass(ItemAngelsteelIngot.class), 1, degree), 'S', new ItemStack(Items.STICK));
-    }
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this, 1, 0), "AAA", " S ", " S ", 'A', new ItemStack(BlockRegistry.getFirstItemFromClass(ItemAngelsteelIngot.class), 1, degree), 'S', new ItemStack(Items.STICK));
+	}
 
-    @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        return true;
-    }
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+		return true;
+	}
 
-    @Override
-    public boolean hitEntity(ItemStack p_77644_1_, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_) {
-        return true;
-    }
+	@Override
+	public boolean hitEntity(ItemStack p_77644_1_, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_) {
+		return true;
+	}
 
-    @Override
-    public int getDegree() {
-        return degree;
-    }
+	@Override
+	public int getDegree() {
+		return degree;
+	}
 }

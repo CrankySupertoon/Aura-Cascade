@@ -15,43 +15,43 @@ import java.util.List;
 
 
 public class ModCreativeTab extends CreativeTabs {
-    public static ModCreativeTab INSTANCE;
-    //Holds the registered items and blocks before they are sorted
-    public ArrayList<ItemStack> creativeTabQueue = new ArrayList<ItemStack>();
-    List<ItemStack> list = new ArrayList<ItemStack>();
+	public static ModCreativeTab INSTANCE;
+	//Holds the registered items and blocks before they are sorted
+	public ArrayList<ItemStack> creativeTabQueue = new ArrayList<ItemStack>();
+	List<ItemStack> list = new ArrayList<ItemStack>();
 
-    public ModCreativeTab() {
-        super(ConstantMod.modId);
-    }
+	public ModCreativeTab() {
+		super(ConstantMod.modId);
+	}
 
-    @Override
-    public ItemStack getIconItemStack() {
-        return new ItemStack(BlockRegistry.getFirstItemFromClass(ItemAuraCrystal.class));
-    }
+	@Override
+	public ItemStack getIconItemStack() {
+		return new ItemStack(BlockRegistry.getFirstItemFromClass(ItemAuraCrystal.class));
+	}
 
-    @Override
-    public ItemStack getTabIconItem() {
-        return Items.STICK.getDefaultInstance();
-    }
+	@Override
+	public ItemStack getTabIconItem() {
+		return Items.STICK.getDefaultInstance();
+	}
 
-    @Override
-    public void displayAllRelevantItems(NonNullList<ItemStack> list) {
-        list.addAll(this.list);
-    }
+	@Override
+	public void displayAllRelevantItems(NonNullList<ItemStack> list) {
+		list.addAll(this.list);
+	}
 
-    public void addItem(Item item) {
-        //item.getSubItems(item, this, creativeTabQueue);
-        creativeTabQueue.add(new ItemStack(item));
-        item.setCreativeTab(this);
-    }
+	public void addItem(Item item) {
+		//item.getSubItems(item, this, creativeTabQueue);
+		creativeTabQueue.add(new ItemStack(item));
+		item.setCreativeTab(this);
+	}
 
-    public void addBlock(Block block) {
-        addItem(Item.getItemFromBlock(block));
-        block.setCreativeTab(this);
-    }
+	public void addBlock(Block block) {
+		addItem(Item.getItemFromBlock(block));
+		block.setCreativeTab(this);
+	}
 
-    public void addAllItemsAndBlocks() {
-        Collections.sort(creativeTabQueue, new ItemStackCompatator());
-        list.addAll(creativeTabQueue);
-    }
+	public void addAllItemsAndBlocks() {
+		Collections.sort(creativeTabQueue, new ItemStackCompatator());
+		list.addAll(creativeTabQueue);
+	}
 }

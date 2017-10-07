@@ -9,15 +9,15 @@ import java.util.Random;
  * Created by pixlepix on 12/20/14.
  */
 public class EntityXPFairy extends EntityFairy {
-    public EntityXPFairy(World p_i1582_1_) {
-        super(p_i1582_1_);
-    }
+	public EntityXPFairy(World p_i1582_1_) {
+		super(p_i1582_1_);
+	}
 
-    @Override
-    public void onEntityUpdate() {
-        if (!world.isRemote && new Random().nextInt(60 * 20) == 0) {
-            EntityXPOrb xpOrb = new EntityXPOrb(world, posX, posY, posZ, 5);
-            world.spawnEntity(xpOrb);
-        }
-    }
+	@Override
+	public void onEntityUpdate() {
+		if (!world.isRemote && new Random().nextInt(60 * 20) == 0) {
+			EntityXPOrb xpOrb = new EntityXPOrb(world, posX, posY, posZ, 5);
+			world.spawnEntity(xpOrb);
+		}
+	}
 }

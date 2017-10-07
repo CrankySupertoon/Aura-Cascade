@@ -12,19 +12,19 @@ import java.util.List;
  * Created by pixlepix on 12/14/14.
  */
 public class EntitySaviorFairy extends EntityFairy {
-    public EntitySaviorFairy(World p_i1582_1_) {
-        super(p_i1582_1_);
-    }
+	public EntitySaviorFairy(World p_i1582_1_) {
+		super(p_i1582_1_);
+	}
 
-    @Override
-    public void onEntityUpdate() {
-        super.onEntityUpdate();
-        if (!world.isRemote && world.getTotalWorldTime() % 3 == 0 && player.getHealth() < 5) {
-            List<EntityMob> nearbyEntities = world.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(posX - 2, posY - 2, posZ - 2, posX + 2, posY + 2, posZ + 2));
-            if (nearbyEntities.size() > 0) {
-                Entity entity = nearbyEntities.get(0);
-                entity.attackEntityFrom(DamageSource.causePlayerDamage(player), 10F);
-            }
-        }
-    }
+	@Override
+	public void onEntityUpdate() {
+		super.onEntityUpdate();
+		if (!world.isRemote && world.getTotalWorldTime() % 3 == 0 && player.getHealth() < 5) {
+			List<EntityMob> nearbyEntities = world.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(posX - 2, posY - 2, posZ - 2, posX + 2, posY + 2, posZ + 2));
+			if (nearbyEntities.size() > 0) {
+				Entity entity = nearbyEntities.get(0);
+				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), 10F);
+			}
+		}
+	}
 }

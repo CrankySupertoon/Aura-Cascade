@@ -17,32 +17,32 @@ import java.util.Random;
  * Created by localmacaccount on 1/19/15.
  */
 public class PotionRedCurse extends Potion {
-    public PotionRedCurse() {
-        super(true, EnumRainbowColor.RED.color.getHex());
-        setPotionName("Red Curse");
+	public PotionRedCurse() {
+		super(true, EnumRainbowColor.RED.color.getHex());
+		setPotionName("Red Curse");
 
-    }
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
-        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.RED), x + 8, y + 8);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
+		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.RED), x + 8, y + 8);
+	}
 
-    @Override
-    public boolean isReady(int p_76397_1_, int p_76397_2_) {
-        return new Random().nextInt(100) == 0;
-    }
+	@Override
+	public boolean isReady(int p_76397_1_, int p_76397_2_) {
+		return new Random().nextInt(100) == 0;
+	}
 
-    @Override
-    public void performEffect(EntityLivingBase entity, int amplifier) {
-        BlockPos pos = new BlockPos(entity);
+	@Override
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+		BlockPos pos = new BlockPos(entity);
 
-        for (BlockPos pos_ : BlockPos.getAllInBox(pos.add(-5, -2, -5), pos.add(6, 3, 6))) {
-            if (entity.world.isAirBlock(pos_) && Blocks.FIRE.canPlaceBlockAt(entity.world, pos_)) {
-                entity.world.setBlockState(pos_, Blocks.FIRE.getDefaultState());
-            }
-        }
-    }
+		for (BlockPos pos_ : BlockPos.getAllInBox(pos.add(-5, -2, -5), pos.add(6, 3, 6))) {
+			if (entity.world.isAirBlock(pos_) && Blocks.FIRE.canPlaceBlockAt(entity.world, pos_)) {
+				entity.world.setBlockState(pos_, Blocks.FIRE.getDefaultState());
+			}
+		}
+	}
 }

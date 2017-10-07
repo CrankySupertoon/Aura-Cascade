@@ -39,246 +39,247 @@ import java.util.List;
  */
 public class ConsumerBlock extends Block implements IToolTip, ITTinkererBlock, ITileEntityProvider {
 
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.Plane.HORIZONTAL);
+	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.Plane.HORIZONTAL);
 
-    public String name;
+	public String name;
 
-    public ConsumerBlock() {
-        super(Material.IRON);
-        this.name = "furnace";
-        setHardness(2F);
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH));
-    }
+	public ConsumerBlock() {
+		super(Material.IRON);
+		this.name = "furnace";
+		setHardness(2F);
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH));
+	}
 
-    public ConsumerBlock(String name) {
-        super(Material.IRON);
-        this.name = name;
-        setHardness(2F);
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH));
-    }
+	public ConsumerBlock(String name) {
+		super(Material.IRON);
+		this.name = name;
+		setHardness(2F);
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH));
+	}
 
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
-    }
+	public static ConsumerBlock getBlockFromName(String name) {
+		List<Block> blockList = BlockRegistry.getBlockFromClass(ConsumerBlock.class);
+		for (Block b : blockList) {
+			if (((ConsumerBlock) b).name != null && ((ConsumerBlock) b).name.equals(name)) {
+				return (ConsumerBlock) b;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex();
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        if (meta < 2 || meta > 5) {
-            meta = 2;
-        }
-        return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
-    }
-
-    public static ConsumerBlock getBlockFromName(String name) {
-        List<Block> blockList = BlockRegistry.getBlockFromClass(ConsumerBlock.class);
-        for (Block b : blockList) {
-            if (((ConsumerBlock) b).name != null && ((ConsumerBlock) b).name.equals(name)) {
-                return (ConsumerBlock) b;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void onBlockPlacedBy(World w, BlockPos pos, IBlockState state, EntityLivingBase livingBase, ItemStack stack) {
-        w.setBlockState(pos, state.withProperty(FACING, livingBase.getHorizontalFacing().getOpposite()));
-        AuraUtil.updateMonitor(w, pos);
-    }
-    @Override
-    public void breakBlock(World w, BlockPos pos, IBlockState state) {
-        super.breakBlock(w, pos, state);
-        AuraUtil.updateMonitor(w, pos);
-    }
-
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        Item auraCrystal = BlockRegistry.getFirstItemFromClass(ItemAuraCrystal.class);
-
-        if (name != null) {
-            if (name.equals("plant")) {
-                return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.GREEN)));
-            }
-            if (name.equals("ore")) {
-                return new CraftingBenchRecipe(new ItemStack(this), "IFI", "FIF", "IFI", 'F', new ItemStack(Blocks.FURNACE), 'I', new ItemStack(auraCrystal));
-            }
-            if (name.equals("loot")) {
-                return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.YELLOW)));
-            }
-            if (name.equals("mob")) {
-                return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.VIOLET)));
-            }
-            if (name.equals("angel")) {
-                return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(300000, ItemMaterial.getPrism()),
-                        new PylonRecipeComponent(200000, new ItemStack(Items.IRON_INGOT)),
-                        new PylonRecipeComponent(200000, new ItemStack(Items.IRON_INGOT)),
-                        new PylonRecipeComponent(200000, new ItemStack(Items.IRON_INGOT)));
-            }
-            if (name.equals("nether")) {
-                return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.RED)));
-            }
-            if (name.equals("potion")) {
-                return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.ORANGE)));
-            }
-            if (name.equals("enchant")) {
-                return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(250000, ItemMaterial.getGem(EnumRainbowColor.BLACK)));
-            }
-            if (name.equals("oreAdv")) {
-                return new CraftingBenchRecipe(new ItemStack(this), "GPG", "GCG", "GGG", 'P', ItemMaterial.getPrism(), 'G', new ItemStack(Blocks.GLASS), 'C', new ItemStack(getBlockFromName("ore")));
-            }
-            if (name.equals("dye")) {
-                return new CraftingBenchRecipe(new ItemStack(this), "CCC", "CFC", "CCC", 'F', new ItemStack(Items.SHEARS), 'C', Blocks.WOOL);
-            }
-            if (name.equals("miner")) {
-                return new CraftingBenchRecipe(new ItemStack(this), "PAP", "IRI", "IRI", 'P', ItemMaterial.getPrism(), 'A', new ItemStack(Items.DIAMOND_PICKAXE), 'I', new ItemStack(Items.IRON_INGOT), 'R', BlockRegistry.getFirstItemFromClass(ItemRedHole.class));
-            }
-            if (name.equals("end")) {
-                return new CraftingBenchRecipe(new ItemStack(this), "EPE", "ENE", "EEE", 'P', ItemMaterial.getPrism(), 'E', new ItemStack(Blocks.END_STONE), 'N', new ItemStack(getBlockFromName("nether")));
-            }
-            if (name.equals("fish")) {
-                return new CraftingBenchRecipe(new ItemStack(this), "RRR", "III", 'R', new ItemStack(Items.FISHING_ROD), 'I', ItemMaterial.getIngot(EnumRainbowColor.BLUE));
-
-            }
-        }
-        return new CraftingBenchRecipe(new ItemStack(this), "FFF", "FIF", "FFF", 'F', new ItemStack(Blocks.FURNACE), 'I', new ItemStack(auraCrystal));
-    }
-
-    @Override
-    public int getCreativeTabPriority() {
-        return 0;
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes"})
 	@Override
-    public ArrayList<Object> getSpecialParameters() {
-        ArrayList result = new ArrayList<Object>();
-        result.add("plant");
-        result.add("ore");
-        result.add("loot");
-        result.add("mob");
-        result.add("angel");
-        result.add("nether");
-        result.add("enchant");
-        result.add("potion");
-        result.add("dye");
-        result.add("oreAdv");
-        result.add("miner");
-        result.add("fish");
-        result.add("end");
-        return result;
-    }
+	public BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, FACING);
+	}
 
-    @Override
-    public String getBlockName() {
-        return "consumerBlock" + name;
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getIndex();
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		if (meta < 2 || meta > 5) {
+			meta = 2;
+		}
+		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public void onBlockPlacedBy(World w, BlockPos pos, IBlockState state, EntityLivingBase livingBase, ItemStack stack) {
+		w.setBlockState(pos, state.withProperty(FACING, livingBase.getHorizontalFacing().getOpposite()));
+		AuraUtil.updateMonitor(w, pos);
+	}
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlock() {
-        return null;
-    }
+	@Override
+	public void breakBlock(World w, BlockPos pos, IBlockState state) {
+		super.breakBlock(w, pos, state);
+		AuraUtil.updateMonitor(w, pos);
+	}
 
-    @Override
-    public Class<? extends TileEntity> getTileEntity() {
-        if (name != null) {
-            if (name.equals("plant")) {
-                return PlanterTile.class;
-            }
-            if (name.equals("ore")) {
-                return ProcessorTile.class;
-            }
-            if (name.equals("oreAdv")) {
-                return ProcessorTileAdv.class;
-            }
-            if (name.equals("loot")) {
-                return LootTile.class;
-            }
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		Item auraCrystal = BlockRegistry.getFirstItemFromClass(ItemAuraCrystal.class);
 
-            if (name.equals("mob")) {
-                return SpawnTile.class;
-            }
-            if (name.equals("angel")) {
-                return AngelSteelTile.class;
-            }
-            if (name.equals("nether")) {
-                return TileRitualNether.class;
-            }
-            if (name.equals("potion")) {
-                return PotionTile.class;
-            }
-            if (name.equals("enchant")) {
-                return EnchanterTile.class;
-            }
-            if (name.equals("dye")) {
-                return DyeTile.class;
-            }
-            if (name.equals("miner")) {
-                return MinerTile.class;
-            }
-            if (name.equals("end")) {
-                return TileRitualEnd.class;
-            }
-            if (name.equals("fish")) {
-                return FisherTile.class;
-                
-            }
-        }
-        return FurnaceTile.class;
-    }
+		if (name != null) {
+			if (name.equals("plant")) {
+				return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.GREEN)));
+			}
+			if (name.equals("ore")) {
+				return new CraftingBenchRecipe(new ItemStack(this), "IFI", "FIF", "IFI", 'F', new ItemStack(Blocks.FURNACE), 'I', new ItemStack(auraCrystal));
+			}
+			if (name.equals("loot")) {
+				return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.YELLOW)));
+			}
+			if (name.equals("mob")) {
+				return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.VIOLET)));
+			}
+			if (name.equals("angel")) {
+				return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(300000, ItemMaterial.getPrism()),
+						new PylonRecipeComponent(200000, new ItemStack(Items.IRON_INGOT)),
+						new PylonRecipeComponent(200000, new ItemStack(Items.IRON_INGOT)),
+						new PylonRecipeComponent(200000, new ItemStack(Items.IRON_INGOT)));
+			}
+			if (name.equals("nether")) {
+				return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.RED)));
+			}
+			if (name.equals("potion")) {
+				return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(100000, ItemMaterial.getGem(EnumRainbowColor.ORANGE)));
+			}
+			if (name.equals("enchant")) {
+				return new PylonRecipe(new ItemStack(this), new PylonRecipeComponent(250000, ItemMaterial.getGem(EnumRainbowColor.BLACK)));
+			}
+			if (name.equals("oreAdv")) {
+				return new CraftingBenchRecipe(new ItemStack(this), "GPG", "GCG", "GGG", 'P', ItemMaterial.getPrism(), 'G', new ItemStack(Blocks.GLASS), 'C', new ItemStack(getBlockFromName("ore")));
+			}
+			if (name.equals("dye")) {
+				return new CraftingBenchRecipe(new ItemStack(this), "CCC", "CFC", "CCC", 'F', new ItemStack(Items.SHEARS), 'C', Blocks.WOOL);
+			}
+			if (name.equals("miner")) {
+				return new CraftingBenchRecipe(new ItemStack(this), "PAP", "IRI", "IRI", 'P', ItemMaterial.getPrism(), 'A', new ItemStack(Items.DIAMOND_PICKAXE), 'I', new ItemStack(Items.IRON_INGOT), 'R', BlockRegistry.getFirstItemFromClass(ItemRedHole.class));
+			}
+			if (name.equals("end")) {
+				return new CraftingBenchRecipe(new ItemStack(this), "EPE", "ENE", "EEE", 'P', ItemMaterial.getPrism(), 'E', new ItemStack(Blocks.END_STONE), 'N', new ItemStack(getBlockFromName("nether")));
+			}
+			if (name.equals("fish")) {
+				return new CraftingBenchRecipe(new ItemStack(this), "RRR", "III", 'R', new ItemStack(Items.FISHING_ROD), 'I', ItemMaterial.getIngot(EnumRainbowColor.BLUE));
 
-    @Override
-    public boolean hasComparatorInputOverride(IBlockState state) {
-        return true;
-    }
+			}
+		}
+		return new CraftingBenchRecipe(new ItemStack(this), "FFF", "FIF", "FFF", 'F', new ItemStack(Blocks.FURNACE), 'I', new ItemStack(auraCrystal));
+	}
 
-    @Override
-    public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos ) {
-        TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity instanceof ConsumerTile) {
-            return (int) (15D * (((double) ((ConsumerTile) tileEntity).progress) / ((double) ((ConsumerTile) tileEntity).getMaxProgress())));
-        } else {
-            return super.getComparatorInputOverride(state, world, pos);
-        }
-    }
+	@Override
+	public int getCreativeTabPriority() {
+		return 0;
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		ArrayList result = new ArrayList<Object>();
+		result.add("plant");
+		result.add("ore");
+		result.add("loot");
+		result.add("mob");
+		result.add("angel");
+		result.add("nether");
+		result.add("enchant");
+		result.add("potion");
+		result.add("dye");
+		result.add("oreAdv");
+		result.add("miner");
+		result.add("fish");
+		result.add("end");
+		return result;
+	}
+
+	@Override
+	public String getBlockName() {
+		return "consumerBlock" + name;
+	}
+
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
+
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
+
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntity() {
+		if (name != null) {
+			if (name.equals("plant")) {
+				return PlanterTile.class;
+			}
+			if (name.equals("ore")) {
+				return ProcessorTile.class;
+			}
+			if (name.equals("oreAdv")) {
+				return ProcessorTileAdv.class;
+			}
+			if (name.equals("loot")) {
+				return LootTile.class;
+			}
+
+			if (name.equals("mob")) {
+				return SpawnTile.class;
+			}
+			if (name.equals("angel")) {
+				return AngelSteelTile.class;
+			}
+			if (name.equals("nether")) {
+				return TileRitualNether.class;
+			}
+			if (name.equals("potion")) {
+				return PotionTile.class;
+			}
+			if (name.equals("enchant")) {
+				return EnchanterTile.class;
+			}
+			if (name.equals("dye")) {
+				return DyeTile.class;
+			}
+			if (name.equals("miner")) {
+				return MinerTile.class;
+			}
+			if (name.equals("end")) {
+				return TileRitualEnd.class;
+			}
+			if (name.equals("fish")) {
+				return FisherTile.class;
+
+			}
+		}
+		return FurnaceTile.class;
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof ConsumerTile) {
+			return (int) (15D * (((double) ((ConsumerTile) tileEntity).progress) / ((double) ((ConsumerTile) tileEntity).getMaxProgress())));
+		} else {
+			return super.getComparatorInputOverride(state, world, pos);
+		}
+	}
 
 
-    @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
 
-        try {
-            return getTileEntity().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+		try {
+			return getTileEntity().newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 
-    @Override
-    public List<String> getTooltipData(World world, EntityPlayer player, BlockPos pos) {
-        List<String> result = new ArrayList<String>();
-        if (world.getTileEntity(pos) instanceof ConsumerTile) {
-            ConsumerTile consumerTile = (ConsumerTile) world.getTileEntity(pos);
-            result.add("Progress: " + consumerTile.progress + " / " + consumerTile.getMaxProgress());
-            result.add("Power per progress: " + consumerTile.getPowerPerProgress());
-            result.add("Last Power: " + consumerTile.lastPower);
+	@Override
+	public List<String> getTooltipData(World world, EntityPlayer player, BlockPos pos) {
+		List<String> result = new ArrayList<String>();
+		if (world.getTileEntity(pos) instanceof ConsumerTile) {
+			ConsumerTile consumerTile = (ConsumerTile) world.getTileEntity(pos);
+			result.add("Progress: " + consumerTile.progress + " / " + consumerTile.getMaxProgress());
+			result.add("Power per progress: " + consumerTile.getPowerPerProgress());
+			result.add("Last Power: " + consumerTile.lastPower);
 
-        }
-        return result;
-    }
+		}
+		return result;
+	}
 }

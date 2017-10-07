@@ -12,60 +12,60 @@ import pixlepix.auracascade.network.PacketBurst;
  */
 public class AuraTileCapacitor extends AuraTile {
 
-    public int[] storageValues = new int[]{100, 1000, 10000, 100000};
-    public int storageValueIndex = 1;
-    public int ticksDisabled = 0;
-    public boolean aboutToBurst = false;
+	public int[] storageValues = new int[]{100, 1000, 10000, 100000};
+	public int storageValueIndex = 1;
+	public int ticksDisabled = 0;
+	public boolean aboutToBurst = false;
 
-    @Override
-    protected void readCustomNBT(NBTTagCompound nbt) {
-        super.readCustomNBT(nbt);
-        storageValueIndex = nbt.getInteger("storageValueIndex");
-        ticksDisabled = nbt.getInteger("ticksDisabled");
-        aboutToBurst = nbt.getBoolean("aboutToBurst");
-    }
+	@Override
+	protected void readCustomNBT(NBTTagCompound nbt) {
+		super.readCustomNBT(nbt);
+		storageValueIndex = nbt.getInteger("storageValueIndex");
+		ticksDisabled = nbt.getInteger("ticksDisabled");
+		aboutToBurst = nbt.getBoolean("aboutToBurst");
+	}
 
-    @Override
-    protected void writeCustomNBT(NBTTagCompound nbt) {
-        super.writeCustomNBT(nbt);
-        nbt.setInteger("storageValueIndex", storageValueIndex);
-        nbt.setInteger("ticksDisabled", ticksDisabled);
-        nbt.setBoolean("aboutToBurst", aboutToBurst);
+	@Override
+	protected void writeCustomNBT(NBTTagCompound nbt) {
+		super.writeCustomNBT(nbt);
+		nbt.setInteger("storageValueIndex", storageValueIndex);
+		nbt.setInteger("ticksDisabled", ticksDisabled);
+		nbt.setBoolean("aboutToBurst", aboutToBurst);
 
-    }
+	}
 
-    @Override
-    public void update() {
-        super.update();
-        if (!world.isRemote) {
-            if (ticksDisabled > 0) {
-                ticksDisabled--;
-            }
+	@Override
+	public void update() {
+		super.update();
+		if (!world.isRemote) {
+			if (ticksDisabled > 0) {
+				ticksDisabled--;
+			}
 
-            if (world.getTotalWorldTime() % 20 == 19 && storage >= storageValues[storageValueIndex]) {
-                aboutToBurst = true;
-                world.setBlockState(getPos(), world.getBlockState(getPos()).withProperty(AuraBlockCapacitor.BURSTING, true), 3);
-                AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(2, getPos().getX() + .5, getPos().getY() + .5, getPos().getZ() + .5), new NetworkRegistry.TargetPoint(world.provider.getDimension(), getPos().getX(), getPos().getY(), getPos().getZ(), 32));
-            }
+			if (world.getTotalWorldTime() % 20 == 19 && storage >= storageValues[storageValueIndex]) {
+				aboutToBurst = true;
+				world.setBlockState(getPos(), world.getBlockState(getPos()).withProperty(AuraBlockCapacitor.BURSTING, true), 3);
+				AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(2, getPos().getX() + .5, getPos().getY() + .5, getPos().getZ() + .5), new NetworkRegistry.TargetPoint(world.provider.getDimension(), getPos().getX(), getPos().getY(), getPos().getZ(), 32));
+			}
 
-            if (world.getTotalWorldTime() % 5 == 0 && aboutToBurst) {
-                aboutToBurst = false;
-                ticksDisabled = 410;
+			if (world.getTotalWorldTime() % 5 == 0 && aboutToBurst) {
+				aboutToBurst = false;
+				ticksDisabled = 410;
 
-                world.setBlockState(getPos(), world.getBlockState(getPos()).withProperty(AuraBlockCapacitor.BURSTING, false), 3);
-                //world.notifyBlockOfStateChange(pos, world.getBlockState(pos).getBlock());
-                markDirty();
-            }
-        }
-    }
+				world.setBlockState(getPos(), world.getBlockState(getPos()).withProperty(AuraBlockCapacitor.BURSTING, false), 3);
+				//world.notifyBlockOfStateChange(pos, world.getBlockState(pos).getBlock());
+				markDirty();
+			}
+		}
+	}
 
-    @Override
-    public boolean canTransfer(BlockPos tuple) {
-        return storage >= storageValues[storageValueIndex] && super.canTransfer(tuple);
-    }
+	@Override
+	public boolean canTransfer(BlockPos tuple) {
+		return storage >= storageValues[storageValueIndex] && super.canTransfer(tuple);
+	}
 
-    @Override
-    public boolean canReceive(BlockPos source) {
-        return super.canReceive(source) && ticksDisabled == 0;
-    }
+	@Override
+	public boolean canReceive(BlockPos source) {
+		return super.canReceive(source) && ticksDisabled == 0;
+	}
 }

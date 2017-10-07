@@ -9,90 +9,89 @@ import pixlepix.auracascade.main.AuraUtil;
  * Created by pixlepix on 12/24/14.
  */
 public class AuraTilePumpBase extends AuraTile {
-    public int pumpPower;
-    public int pumpSpeed;
+	public int pumpPower;
+	public int pumpSpeed;
 
-    @Override
-    protected void readCustomNBT(NBTTagCompound nbt) {
-        super.readCustomNBT(nbt);
-        pumpPower = nbt.getInteger("pumpPower");
-        pumpSpeed = nbt.getInteger("pumpSpeed");
-    }
+	@Override
+	protected void readCustomNBT(NBTTagCompound nbt) {
+		super.readCustomNBT(nbt);
+		pumpPower = nbt.getInteger("pumpPower");
+		pumpSpeed = nbt.getInteger("pumpSpeed");
+	}
 
-    @Override
-    protected void writeCustomNBT(NBTTagCompound nbt) {
-        super.writeCustomNBT(nbt);
-        nbt.setInteger("pumpPower", pumpPower);
-        nbt.setInteger("pumpSpeed", pumpSpeed);
-    }
+	@Override
+	protected void writeCustomNBT(NBTTagCompound nbt) {
+		super.writeCustomNBT(nbt);
+		nbt.setInteger("pumpPower", pumpPower);
+		nbt.setInteger("pumpSpeed", pumpSpeed);
+	}
 
-    public boolean isAlternator() {
-        return false;
-    }
+	public boolean isAlternator() {
+		return false;
+	}
 
-    @Override
-    public boolean canTransfer(BlockPos tuple) {
-        return false;
-    }
+	@Override
+	public boolean canTransfer(BlockPos tuple) {
+		return false;
+	}
 
-    @Override
-    public boolean canReceive(BlockPos source) {
-        return source.getY() <= getPos().getY() && super.canReceive(source);
-    }
+	@Override
+	public boolean canReceive(BlockPos source) {
+		return source.getY() <= getPos().getY() && super.canReceive(source);
+	}
 
-    public void addFuel(int time, int speed) {
-        if (time * speed > pumpSpeed * pumpPower) {
-            pumpSpeed = speed;
-            pumpPower = time;
-            if (isAlternator()) {
-                pumpSpeed *= 3;
+	public void addFuel(int time, int speed) {
+		if (time * speed > pumpSpeed * pumpPower) {
+			pumpSpeed = speed;
+			pumpPower = time;
+			if (isAlternator()) {
+				pumpSpeed *= 3;
 
-            }
-        }
-        AuraUtil.updateMonitor(world, getPos());
-    }
+			}
+		}
+		AuraUtil.updateMonitor(world, getPos());
+	}
 
 
+	@Override
+	public void update() {
+		super.update();
+		if (!world.isRemote && world.getTotalWorldTime() % 20 == 2 && world.isBlockIndirectlyGettingPowered(getPos()) == 0) {
+			if (pumpPower > 0) {
+				AuraTile upNode = null;
+				for (int i = 1; i < 16; i++) {
+					TileEntity te = world.getTileEntity(getPos().up(i));
+					if (te instanceof AuraTile && isOpenPath(getPos().up(i))) {
+						upNode = (AuraTile) te;
+						break;
+					}
+				}
+				if (upNode != null) {
 
-    @Override
-    public void update() {
-        super.update();
-        if (!world.isRemote && world.getTotalWorldTime() % 20 == 2 && world.isBlockIndirectlyGettingPowered(getPos()) == 0) {
-            if (pumpPower > 0) {
-                AuraTile upNode = null;
-                for (int i = 1; i < 16; i++) {
-                    TileEntity te = world.getTileEntity(getPos().up(i));
-                    if (te instanceof AuraTile && isOpenPath(getPos().up(i))) {
-                        upNode = (AuraTile) te;
-                        break;
-                    }
-                }
-                if (upNode != null) {
+					pumpPower--;
+					if (pumpPower == 0) {
+						AuraUtil.updateMonitor(world, getPos());
 
-                    pumpPower--;
-                    if (pumpPower == 0) {
-                        AuraUtil.updateMonitor(world, getPos());
+					}
+					int dist = upNode.getPos().getY() - getPos().getY();
+					int quantity = pumpSpeed / dist;
+					if (isAlternator()) {
+						float f = getAlternatingFactor();
+						quantity *= f;
+					}
 
-                    }
-                    int dist = upNode.getPos().getY() - getPos().getY();
-                    int quantity = pumpSpeed / dist;
-                    if (isAlternator()) {
-                        float f = getAlternatingFactor();
-                        quantity *= f;
-                    }
+					quantity = Math.min(quantity, storage);
+					burst(upNode.getPos(), "spell", .1, .1, 1);
+					storage -= quantity;
+					upNode.storage += quantity;
 
-                    quantity = Math.min(quantity, storage);
-                    burst(upNode.getPos(), "spell", .1, .1, 1);
-                    storage -= quantity;
-                    upNode.storage += quantity;
+				}
+			}
+		}
+	}
 
-                }
-            }
-        }
-    }
+	public float getAlternatingFactor() {
+		return (float) (1 + Math.sin(Math.PI * world.getTotalWorldTime() / 10000)) / 2;
 
-    public float getAlternatingFactor() {
-        return (float) (1 + Math.sin(Math.PI * world.getTotalWorldTime() / 10000)) / 2;
-
-    }
+	}
 }

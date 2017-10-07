@@ -44,94 +44,95 @@ import pixlepix.auracascade.village.ComponentAuraHut;
 
 public class CommonProxy {
 
-    public static EventHandler eventHandler;
+	public static EventHandler eventHandler;
 
-    public static EnchantEventHandler eventHandlerEnch;
-
-
-    public int renderPass;
-    public BlockRegistry registry;
-    public SimpleNetworkWrapper networkWrapper;
-
-    public void preInit(FMLPreInitializationEvent event) {
-        Config.init(event);
-        ModCreativeTab.INSTANCE = new ModCreativeTab();
-        AngelsteelToolHelper.initMaterials();
-        registry = new BlockRegistry();
-        registry.preInit();
-        EnchantEventHandler.init();
-        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ConstantMod.modId);
-        networkWrapper.registerMessage(PacketBurst.class, PacketBurst.class, 0, Side.CLIENT);
-
-        networkWrapper.registerMessage(PacketFairyUpdate.class, PacketFairyUpdate.class, 1, Side.CLIENT);
-        networkWrapper.registerMessage(PacketFairyRequestUpdate.class, PacketFairyRequestUpdate.class, 2, Side.SERVER);
-        networkWrapper.registerMessage(PacketAngelJump.PacketAngelJumpHandler.class, PacketAngelJump.class, 4, Side.SERVER);
-        networkWrapper.registerMessage(PacketSyncQuestData.PacketSyncQuestDataHandler.class, PacketSyncQuestData.class, 5, Side.CLIENT);
+	public static EnchantEventHandler eventHandlerEnch;
 
 
-        if (Config.villageGeneration) {
-            VillagerRegistry.instance().registerVillageCreationHandler(new AuraHutHandler());
-        }
-        MapGenStructureIO.registerStructureComponent(ComponentAuraHut.class, "aura:auraHut");
-    }
+	public int renderPass;
+	public BlockRegistry registry;
+	public SimpleNetworkWrapper networkWrapper;
 
-    public void addToTutorial(LexiconEntry entry) {
-    }
+	public void preInit(FMLPreInitializationEvent event) {
+		Config.init(event);
+		ModCreativeTab.INSTANCE = new ModCreativeTab();
+		AngelsteelToolHelper.initMaterials();
+		registry = new BlockRegistry();
+		registry.preInit();
+		EnchantEventHandler.init();
+		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ConstantMod.modId);
+		networkWrapper.registerMessage(PacketBurst.class, PacketBurst.class, 0, Side.CLIENT);
 
-    public void setEntryToOpen(LexiconEntry entry) {
+		networkWrapper.registerMessage(PacketFairyUpdate.class, PacketFairyUpdate.class, 1, Side.CLIENT);
+		networkWrapper.registerMessage(PacketFairyRequestUpdate.class, PacketFairyRequestUpdate.class, 2, Side.SERVER);
+		networkWrapper.registerMessage(PacketAngelJump.PacketAngelJumpHandler.class, PacketAngelJump.class, 4, Side.SERVER);
+		networkWrapper.registerMessage(PacketSyncQuestData.PacketSyncQuestDataHandler.class, PacketSyncQuestData.class, 5, Side.CLIENT);
 
-    }
 
-    public World getWorld() {
-        return null;
-    }
+		if (Config.villageGeneration) {
+			VillagerRegistry.instance().registerVillageCreationHandler(new AuraHutHandler());
+		}
+		MapGenStructureIO.registerStructureComponent(ComponentAuraHut.class, "aura:auraHut");
+	}
 
-    public EntityPlayer getPlayer() {
-        return null;
-    }
+	public void addToTutorial(LexiconEntry entry) {
+	}
 
-    public void init(FMLInitializationEvent event) {
-        registry.init();
+	public void setEntryToOpen(LexiconEntry entry) {
 
-        NetworkRegistry.INSTANCE.registerGuiHandler(AuraCascade.instance, new GuiHandler());
+	}
 
-        PylonRecipeRegistry.init();
-        ProcessorRecipeRegistry.init();
-        PotionManager.init();
-        eventHandler = new EventHandler();
-        MinecraftForge.EVENT_BUS.register(eventHandler);
-        EnchantmentManager.init();
-        eventHandlerEnch = new EnchantEventHandler();
-        MinecraftForge.EVENT_BUS.register(eventHandlerEnch);
-        EntityRegistry.registerModEntity(new ResourceLocation(ConstantMod.modId), EntityFairy.class, "Fairy", 0, AuraCascade.instance, 50, 250, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(ConstantMod.modId), EntityMinerExplosion.class, "ExplosionMiner", 1, AuraCascade.instance, 50, 40, true);
-        QuestManager.init();
-    }
+	public World getWorld() {
+		return null;
+	}
 
-    public void postInit(FMLPostInitializationEvent event) {
-        registry.postInit();
-        LexiconData.init();
-        if (Loader.isModLoaded("Thaumcraft")) {
-            TCCompat.postInit();
-        }
+	public EntityPlayer getPlayer() {
+		return null;
+	}
 
-        //RiM IMC for blacklisting color nodes
-        for (Block block : BlockRegistry.getBlockFromClass(AuraBlock.class)) {
-            FMLInterModComms.sendMessage("JAKJ_RedstoneInMotion", "blacklistHard", Block.REGISTRY.getNameForObject(block).toString());
-        }
-        OreDropManager.init();
-    }
-    public void setLexiconStack(ItemStack stack) {
-    }
+	public void init(FMLInitializationEvent event) {
+		registry.init();
 
-    public void addBlockDestroyEffects(BlockPos tuple) {
-    }
+		NetworkRegistry.INSTANCE.registerGuiHandler(AuraCascade.instance, new GuiHandler());
 
-    public ParticleManager getEffectRenderer() {
-        return null;
-    }
+		PylonRecipeRegistry.init();
+		ProcessorRecipeRegistry.init();
+		PotionManager.init();
+		eventHandler = new EventHandler();
+		MinecraftForge.EVENT_BUS.register(eventHandler);
+		EnchantmentManager.init();
+		eventHandlerEnch = new EnchantEventHandler();
+		MinecraftForge.EVENT_BUS.register(eventHandlerEnch);
+		EntityRegistry.registerModEntity(new ResourceLocation(ConstantMod.modId), EntityFairy.class, "Fairy", 0, AuraCascade.instance, 50, 250, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(ConstantMod.modId), EntityMinerExplosion.class, "ExplosionMiner", 1, AuraCascade.instance, 50, 40, true);
+		QuestManager.init();
+	}
 
-    public void addEffectBypassingLimit(Particle entityFX) {
+	public void postInit(FMLPostInitializationEvent event) {
+		registry.postInit();
+		LexiconData.init();
+		if (Loader.isModLoaded("Thaumcraft")) {
+			TCCompat.postInit();
+		}
 
-    }
+		//RiM IMC for blacklisting color nodes
+		for (Block block : BlockRegistry.getBlockFromClass(AuraBlock.class)) {
+			FMLInterModComms.sendMessage("JAKJ_RedstoneInMotion", "blacklistHard", Block.REGISTRY.getNameForObject(block).toString());
+		}
+		OreDropManager.init();
+	}
+
+	public void setLexiconStack(ItemStack stack) {
+	}
+
+	public void addBlockDestroyEffects(BlockPos tuple) {
+	}
+
+	public ParticleManager getEffectRenderer() {
+		return null;
+	}
+
+	public void addEffectBypassingLimit(Particle entityFX) {
+
+	}
 }

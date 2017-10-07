@@ -10,18 +10,18 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  */
 public class OreCraftingBenchRecipe extends ThaumicTinkererRecipe {
 
-    private final ItemStack output;
-    private final Object[] stuff;
-    public IRecipe iRecipe;
+	private final ItemStack output;
+	private final Object[] stuff;
+	public IRecipe iRecipe;
 
-    public OreCraftingBenchRecipe(ItemStack output, Object... stuff) {
-        this.output = output;
-        this.stuff = stuff;
-    }
+	public OreCraftingBenchRecipe(ItemStack output, Object... stuff) {
+		this.output = output;
+		this.stuff = stuff;
+	}
 
-    @Override
-    public void registerRecipe() {
-        iRecipe = new ShapedOreRecipe(output, stuff);
-        GameRegistry.addRecipe(iRecipe);
-    }
+	@Override
+	public void registerRecipe() {
+		iRecipe = new ShapedOreRecipe(output, stuff);
+		GameRegistry.addRecipe(iRecipe);
+	}
 }

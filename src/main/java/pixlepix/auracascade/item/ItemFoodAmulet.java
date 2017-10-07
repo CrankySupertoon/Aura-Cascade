@@ -18,73 +18,73 @@ import java.util.ArrayList;
  */
 public class ItemFoodAmulet extends Item implements IBauble, ITTinkererItem {
 
-    //Logic implemented in EventHandler
+	//Logic implemented in EventHandler
 
-    @Override
-    public BaubleType getBaubleType(ItemStack itemStack) {
-        return BaubleType.AMULET;
-    }
+	@Override
+	public BaubleType getBaubleType(ItemStack itemStack) {
+		return BaubleType.AMULET;
+	}
 
-    @Override
-    public void onWornTick(ItemStack itemStack, EntityLivingBase entityLivingBase) {
+	@Override
+	public void onWornTick(ItemStack itemStack, EntityLivingBase entityLivingBase) {
 
-    }
+	}
 
-    @Override
-    public void onEquipped(ItemStack itemStack, EntityLivingBase entityLivingBase) {
+	@Override
+	public void onEquipped(ItemStack itemStack, EntityLivingBase entityLivingBase) {
 
-    }
+	}
 
-    @Override
-    public void onUnequipped(ItemStack itemStack, EntityLivingBase entityLivingBase) {
+	@Override
+	public void onUnequipped(ItemStack itemStack, EntityLivingBase entityLivingBase) {
 
-    }
+	}
 
-    @Override
-    public boolean canEquip(ItemStack itemStack, EntityLivingBase entityLivingBase) {
-        return true;
-    }
+	@Override
+	public boolean canEquip(ItemStack itemStack, EntityLivingBase entityLivingBase) {
+		return true;
+	}
 
-    @Override
-    public boolean canUnequip(ItemStack itemStack, EntityLivingBase entityLivingBase) {
-        return true;
-    }
+	@Override
+	public boolean canUnequip(ItemStack itemStack, EntityLivingBase entityLivingBase) {
+		return true;
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public String getItemName() {
-        return "amuletFood";
-    }
+	@Override
+	public String getItemName() {
+		return "amuletFood";
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
-
-
-    @Override
-    public int getItemStackLimit(ItemStack stack) {
-        return 1;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), " R ", "GAB", " Y "
-                , 'R', ItemMaterial.getGem(EnumRainbowColor.RED), 'G', ItemMaterial.getGem(EnumRainbowColor.GREEN), 'Y', ItemMaterial.getGem(EnumRainbowColor.YELLOW), 'B', ItemMaterial.getGem(EnumRainbowColor.BLUE), 'A', new ItemStack(Items.APPLE));
-    }
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		return 1;
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -50;
-    }
+
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), " R ", "GAB", " Y "
+				, 'R', ItemMaterial.getGem(EnumRainbowColor.RED), 'G', ItemMaterial.getGem(EnumRainbowColor.GREEN), 'Y', ItemMaterial.getGem(EnumRainbowColor.YELLOW), 'B', ItemMaterial.getGem(EnumRainbowColor.BLUE), 'A', new ItemStack(Items.APPLE));
+	}
+
+	@Override
+	public int getCreativeTabPriority() {
+		return -50;
+	}
 }

@@ -16,30 +16,30 @@ import java.util.Random;
  * Created by localmacaccount on 1/19/15.
  */
 public class PotionBlueCurse extends Potion {
-    public PotionBlueCurse() {
-        super(true, EnumRainbowColor.BLUE.color.getHex());
-        setPotionName("Blue Curse");
+	public PotionBlueCurse() {
+		super(true, EnumRainbowColor.BLUE.color.getHex());
+		setPotionName("Blue Curse");
 
-    }
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
-        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.BLUE), x + 8, y + 8);
-        //mc.currentScreen.drawTexturedModelRectFromIcon(x + 8, y + 8, ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.BLUE).getIconIndex(), 16, 16);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
+		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.BLUE), x + 8, y + 8);
+		//mc.currentScreen.drawTexturedModelRectFromIcon(x + 8, y + 8, ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.BLUE).getIconIndex(), 16, 16);
+	}
 
-    @Override
-    public boolean isReady(int p_76397_1_, int p_76397_2_) {
-        return new Random().nextInt(50) == 0;
-    }
+	@Override
+	public boolean isReady(int p_76397_1_, int p_76397_2_) {
+		return new Random().nextInt(50) == 0;
+	}
 
-    @Override
-    public void performEffect(EntityLivingBase entity, int amplifier) {
+	@Override
+	public void performEffect(EntityLivingBase entity, int amplifier) {
 
-        if (entity.getHealth() * 2 < entity.getMaxHealth()) {
-            entity.attackEntityFrom(DamageSource.MAGIC, 4.0F);
-        }
-    }
+		if (entity.getHealth() * 2 < entity.getMaxHealth()) {
+			entity.attackEntityFrom(DamageSource.MAGIC, 4.0F);
+		}
+	}
 }

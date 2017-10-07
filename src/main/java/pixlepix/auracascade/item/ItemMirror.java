@@ -32,97 +32,97 @@ import java.util.List;
  * Created by localmacaccount on 5/30/15.
  */
 public class ItemMirror extends Item implements ITTinkererItem {
-    public ItemMirror() {
-        super();
-    }
+	public ItemMirror() {
+		super();
+	}
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public String getItemName() {
-        return "mirror";
-    }
+	@Override
+	public String getItemName() {
+		return "mirror";
+	}
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     *
-     * @param world
-     * @param player
-     */
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
-        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(player.posX - 6, player.posY - 6, player.posZ - 6, player.posX + 6, player.posY + 6, player.posZ + 6);
-        ArrayList<EntityFireball> fireballs = (ArrayList<EntityFireball>) world.getEntitiesWithinAABB(EntityFireball.class, axisAlignedBB);
-        for (EntityFireball fireball : fireballs) {
-            if (fireball.getDistanceSqToEntity(player) <= 25) {
-                redirect(fireball);
-            }
-        }
-        AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(7, player.posX, player.posY, player.posZ), new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 32));
+	/**
+	 * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
+	 *
+	 * @param world
+	 * @param player
+	 */
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		AxisAlignedBB axisAlignedBB = new AxisAlignedBB(player.posX - 6, player.posY - 6, player.posZ - 6, player.posX + 6, player.posY + 6, player.posZ + 6);
+		ArrayList<EntityFireball> fireballs = (ArrayList<EntityFireball>) world.getEntitiesWithinAABB(EntityFireball.class, axisAlignedBB);
+		for (EntityFireball fireball : fireballs) {
+			if (fireball.getDistanceSqToEntity(player) <= 25) {
+				redirect(fireball);
+			}
+		}
+		AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(7, player.posX, player.posY, player.posZ), new NetworkRegistry.TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 32));
 
-        return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
-    }
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
+	}
 
-    public void redirect(EntityFireball entity) {
+	public void redirect(EntityFireball entity) {
 
-        if (!entity.world.isRemote && !(entity instanceof EntityWitherSkull)) {
-            AxisAlignedBB axisAlignedBB = new AxisAlignedBB(entity.posX - 100, entity.posY - 100, entity.posZ - 100, entity.posX + 100, entity.posY + 100, entity.posZ + 100);
-
-
-            List<EntityFireball> targets = ImmutableList.copyOf(Iterables.filter(entity.world.getEntitiesWithinAABB(EntityFireball.class, axisAlignedBB), new Predicate<EntityFireball>() {
-                @Override
-                public boolean apply(EntityFireball input) {
-                    return input.shootingEntity instanceof EntityBlaze || input.shootingEntity instanceof EntityGhast;
-                }
-            }));
-
-            if (targets.size() > 0) {
-
-                //Check to make sure the fireball is traveling towards the player
-                Entity target = targets.get(0);
-                entity.motionX = (target.posX - entity.posX) / 15;
-                entity.motionY = (target.posY - entity.posY) / 15;
-                entity.motionZ = (target.posZ - entity.posZ) / 15;
-                entity.accelerationX = entity.motionX * .3;
-                entity.accelerationY = entity.motionY * .3;
-                entity.accelerationZ = entity.motionZ * .3;
-                AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(1, entity.posX, entity.posY, entity.posZ), new NetworkRegistry.TargetPoint(entity.world.provider.getDimension(), entity.posX, entity.posY, entity.posZ, 32));
-            }
-        }
-    }
+		if (!entity.world.isRemote && !(entity instanceof EntityWitherSkull)) {
+			AxisAlignedBB axisAlignedBB = new AxisAlignedBB(entity.posX - 100, entity.posY - 100, entity.posZ - 100, entity.posX + 100, entity.posY + 100, entity.posZ + 100);
 
 
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-        boolean result = super.onLeftClickEntity(stack, player, entity);
-        if (entity instanceof EntityFireball) {
-            EntityFireball fireball = (EntityFireball) entity;
-            redirect(fireball);
-            return true;
-        }
-        return result;
-    }
+			List<EntityFireball> targets = ImmutableList.copyOf(Iterables.filter(entity.world.getEntitiesWithinAABB(EntityFireball.class, axisAlignedBB), new Predicate<EntityFireball>() {
+				@Override
+				public boolean apply(EntityFireball input) {
+					return input.shootingEntity instanceof EntityBlaze || input.shootingEntity instanceof EntityGhast;
+				}
+			}));
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), " G ", "GIG", " G ", 'G', new ItemStack(Blocks.GLASS), 'I', ItemMaterial.getIngot(EnumRainbowColor.RED));
-    }
+			if (targets.size() > 0) {
 
-    @Override
-    public int getCreativeTabPriority() {
-        return -50;
-    }
+				//Check to make sure the fireball is traveling towards the player
+				Entity target = targets.get(0);
+				entity.motionX = (target.posX - entity.posX) / 15;
+				entity.motionY = (target.posY - entity.posY) / 15;
+				entity.motionZ = (target.posZ - entity.posZ) / 15;
+				entity.accelerationX = entity.motionX * .3;
+				entity.accelerationY = entity.motionY * .3;
+				entity.accelerationZ = entity.motionZ * .3;
+				AuraCascade.proxy.networkWrapper.sendToAllAround(new PacketBurst(1, entity.posX, entity.posY, entity.posZ), new NetworkRegistry.TargetPoint(entity.world.provider.getDimension(), entity.posX, entity.posY, entity.posZ, 32));
+			}
+		}
+	}
+
+
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		boolean result = super.onLeftClickEntity(stack, player, entity);
+		if (entity instanceof EntityFireball) {
+			EntityFireball fireball = (EntityFireball) entity;
+			redirect(fireball);
+			return true;
+		}
+		return result;
+	}
+
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), " G ", "GIG", " G ", 'G', new ItemStack(Blocks.GLASS), 'I', ItemMaterial.getIngot(EnumRainbowColor.RED));
+	}
+
+	@Override
+	public int getCreativeTabPriority() {
+		return -50;
+	}
 }

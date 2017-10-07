@@ -7,19 +7,19 @@ import pixlepix.auracascade.main.CommonProxy;
  * Created by pixlepix on 12/16/14.
  */
 public class EntityScareFairy extends EntityFairy {
-    public EntityScareFairy(World p_i1582_1_) {
-        super(p_i1582_1_);
-        if (!world.isRemote) {
-            CommonProxy.eventHandler.scareFairies.add(this);
-        }
-    }
+	public EntityScareFairy(World p_i1582_1_) {
+		super(p_i1582_1_);
+		if (!world.isRemote) {
+			CommonProxy.eventHandler.scareFairies.add(this);
+		}
+	}
 
-    @Override
-    public void setDead() {
-        super.setDead();
+	@Override
+	public void setDead() {
+		super.setDead();
 
-        if (!world.isRemote) {
-            CommonProxy.eventHandler.scareFairies.remove(this);
-        }
-    }
+		if (!world.isRemote) {
+			CommonProxy.eventHandler.scareFairies.remove(this);
+		}
+	}
 }

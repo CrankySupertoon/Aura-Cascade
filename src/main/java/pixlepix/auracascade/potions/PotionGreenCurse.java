@@ -18,39 +18,39 @@ import java.util.Random;
  * Created by localmacaccount on 1/19/15.
  */
 public class PotionGreenCurse extends Potion {
-    public PotionGreenCurse() {
-        super(true, EnumRainbowColor.GREEN.color.getHex());
-        setPotionName("Green Curse");
+	public PotionGreenCurse() {
+		super(true, EnumRainbowColor.GREEN.color.getHex());
+		setPotionName("Green Curse");
 
-    }
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
 
-        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.GREEN), x + 8, y + 8);
-    }
+		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getRenderItem().renderItemIntoGUI(ItemAngelsteelSword.getStackFirstDegree(EnumRainbowColor.GREEN), x + 8, y + 8);
+	}
 
-    @Override
-    public boolean isReady(int p_76397_1_, int p_76397_2_) {
-        return new Random().nextInt(40) == 0;
-    }
+	@Override
+	public boolean isReady(int p_76397_1_, int p_76397_2_) {
+		return new Random().nextInt(40) == 0;
+	}
 
-    @Override
-    public void performEffect(EntityLivingBase entity, int amplifier) {
+	@Override
+	public void performEffect(EntityLivingBase entity, int amplifier) {
 
-        entity.attackEntityFrom(DamageSource.MAGIC, 2.0F);
+		entity.attackEntityFrom(DamageSource.MAGIC, 2.0F);
 
 
-        List<EntityLivingBase> entities = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(entity.posX - 5, entity.posY - 5, entity.posZ - 5, entity.posX + 5, entity.posY + 5, entity.posZ + 5));
-        if (entities.size() > 0) {
-            EntityLivingBase entityLiving = entities.get(new Random().nextInt(entities.size()));
-            if (entityLiving != entity) {
-                if (!entityLiving.isPotionActive(this)) {
-                    entityLiving.addPotionEffect(new PotionEffect(this, entity.getActivePotionEffect(this).getDuration()));
-                }
-            }
-        }
-    }
+		List<EntityLivingBase> entities = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(entity.posX - 5, entity.posY - 5, entity.posZ - 5, entity.posX + 5, entity.posY + 5, entity.posZ + 5));
+		if (entities.size() > 0) {
+			EntityLivingBase entityLiving = entities.get(new Random().nextInt(entities.size()));
+			if (entityLiving != entity) {
+				if (!entityLiving.isPotionActive(this)) {
+					entityLiving.addPotionEffect(new PotionEffect(this, entity.getActivePotionEffect(this).getDuration()));
+				}
+			}
+		}
+	}
 }

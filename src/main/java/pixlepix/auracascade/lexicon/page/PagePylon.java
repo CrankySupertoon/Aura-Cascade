@@ -25,75 +25,75 @@ import java.util.Collections;
  * Created by pixlepix on 12/28/14.
  */
 public class PagePylon extends PageRecipe {
-    private static final ResourceLocation craftingOverlay = new ResourceLocation("aura:textures/gui/pylonOverlay.png");
+	private static final ResourceLocation craftingOverlay = new ResourceLocation("aura:textures/gui/pylonOverlay.png");
 
-    PylonRecipe recipe;
+	PylonRecipe recipe;
 
-    public PagePylon(String unlocalizedName, PylonRecipe recipe) {
-        super(unlocalizedName);
-        this.recipe = recipe;
-    }
+	public PagePylon(String unlocalizedName, PylonRecipe recipe) {
+		super(unlocalizedName);
+		this.recipe = recipe;
+	}
 
-    public PagePylon(String unlocalizedName, Class item) {
-        super(unlocalizedName);
-        if (Item.class.isAssignableFrom(item)) {
-            this.recipe = (PylonRecipe) BlockRegistry.getFirstRecipeFromItem(item);
-        }
-        if (Block.class.isAssignableFrom(item)) {
-            this.recipe = (PylonRecipe) BlockRegistry.getFirstRecipeFromBlock(item);
-        }
-    }
+	public PagePylon(String unlocalizedName, Class item) {
+		super(unlocalizedName);
+		if (Item.class.isAssignableFrom(item)) {
+			this.recipe = (PylonRecipe) BlockRegistry.getFirstRecipeFromItem(item);
+		}
+		if (Block.class.isAssignableFrom(item)) {
+			this.recipe = (PylonRecipe) BlockRegistry.getFirstRecipeFromBlock(item);
+		}
+	}
 
-    @Override
-    public void onPageAdded(LexiconEntry entry, int index) {
-        LexiconRecipeMappings.map(recipe.result, entry, index);
-    }
+	@Override
+	public void onPageAdded(LexiconEntry entry, int index) {
+		LexiconRecipeMappings.map(recipe.result, entry, index);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void renderRecipe(IGuiLexiconEntry gui, int mx, int my) {
-        renderPylonRecipe(gui, recipe, mx, my);
-
-
-        TextureManager render = Minecraft.getMinecraft().renderEngine;
-        render.bindTexture(craftingOverlay);
-
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        ((GuiScreen) gui).drawTexturedModalRect(gui.getLeft(), gui.getTop(), 0, 0, gui.getWidth(), gui.getHeight());
-
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        render.bindTexture(craftingOverlay);
-        GlStateManager.enableBlend();
-        GlStateManager.disableBlend();
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderRecipe(IGuiLexiconEntry gui, int mx, int my) {
+		renderPylonRecipe(gui, recipe, mx, my);
 
 
-    @SideOnly(Side.CLIENT)
-    public void renderPylonRecipe(IGuiLexiconEntry gui, PylonRecipe recipe, int mx, int my) {
-        for (int i = 0; i < 4; i++) {
-            EnumFacing direction = CraftingCenterTile.pedestalRelativeLocations.get(i);
+		TextureManager render = Minecraft.getMinecraft().renderEngine;
+		render.bindTexture(craftingOverlay);
 
-            int x = 2 + direction.getFrontOffsetX();
-            int y = 2 + direction.getFrontOffsetZ();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1F, 1F, 1F, 1F);
+		((GuiScreen) gui).drawTexturedModalRect(gui.getLeft(), gui.getTop(), 0, 0, gui.getWidth(), gui.getHeight());
 
-            renderItemAtGridPos(gui, x, y, recipe.componentList.get(i).itemStack, true);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            int xPos = gui.getLeft() + x * 29 + 7 + (y == 0 && x == 3 ? 10 : 0);
-            int yPos = gui.getTop() + y * 29 + 24 - (y == 0 ? 7 : 0);
-            int quantity = recipe.componentList.get(i).auraQuantity;
-            //If the 'Shift click to see recipe is present
-            //We need to offset the color display
+		render.bindTexture(craftingOverlay);
+		GlStateManager.enableBlend();
+		GlStateManager.disableBlend();
+	}
 
-            LexiconRecipeMappings.EntryData data = LexiconRecipeMappings.getDataForStack(recipe.componentList.get(i).itemStack);
-            int yOffset = (data != null && (data.entry != gui.getEntry() || data.page != gui.getPageOn())) ? 32 : 16;
-            if (mx >= xPos && my >= yPos && mx < xPos + 16 && my < yPos + 16) {
-                VazkiiRenderHelper.renderTooltip(mx, my + yOffset, Collections.singletonList("" + quantity));
-            }
-        }
-        renderItemAtGridPos(gui, 2, 0, recipe.result, false);
-    }
+
+	@SideOnly(Side.CLIENT)
+	public void renderPylonRecipe(IGuiLexiconEntry gui, PylonRecipe recipe, int mx, int my) {
+		for (int i = 0; i < 4; i++) {
+			EnumFacing direction = CraftingCenterTile.pedestalRelativeLocations.get(i);
+
+			int x = 2 + direction.getFrontOffsetX();
+			int y = 2 + direction.getFrontOffsetZ();
+
+			renderItemAtGridPos(gui, x, y, recipe.componentList.get(i).itemStack, true);
+
+			int xPos = gui.getLeft() + x * 29 + 7 + (y == 0 && x == 3 ? 10 : 0);
+			int yPos = gui.getTop() + y * 29 + 24 - (y == 0 ? 7 : 0);
+			int quantity = recipe.componentList.get(i).auraQuantity;
+			//If the 'Shift click to see recipe is present
+			//We need to offset the color display
+
+			LexiconRecipeMappings.EntryData data = LexiconRecipeMappings.getDataForStack(recipe.componentList.get(i).itemStack);
+			int yOffset = (data != null && (data.entry != gui.getEntry() || data.page != gui.getPageOn())) ? 32 : 16;
+			if (mx >= xPos && my >= yPos && mx < xPos + 16 && my < yPos + 16) {
+				VazkiiRenderHelper.renderTooltip(mx, my + yOffset, Collections.singletonList("" + quantity));
+			}
+		}
+		renderItemAtGridPos(gui, 2, 0, recipe.result, false);
+	}
 }

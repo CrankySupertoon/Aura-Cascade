@@ -22,83 +22,83 @@ import java.util.ArrayList;
  * Created by localmacaccount on 5/27/15.
  */
 public class BlockMonitor extends Block implements ITTinkererBlock {
-    public BlockMonitor() {
-        super(Material.REDSTONE_LIGHT);
-        setHardness(3);
-        setHarvestLevel("pickaxe", 2);
-    }
+	public BlockMonitor() {
+		super(Material.REDSTONE_LIGHT);
+		setHardness(3);
+		setHarvestLevel("pickaxe", 2);
+	}
 
-    @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return true;
-    }
-
-
-    @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        EnumFacing powerDirection = side.getOpposite();
-        for (EnumFacing direction : EnumFacing.VALUES) {
-            if (direction != powerDirection) {
-                TileEntity auraTile = world.getTileEntity(pos.offset(direction));
-
-                if (auraTile instanceof AuraTilePumpBase) {
-                    return ((AuraTilePumpBase) auraTile).pumpPower > 0 ? 0 : 15;
-                }
-                if (auraTile instanceof ConsumerTile) {
-                    return ((ConsumerTile) auraTile).validItemsNearby() ? 0 : 15;
-                }
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * Can this block provide power. Only wire currently seems to have this change based on its state.
-     */
+	@Override
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return true;
+	}
 
 
-    @Override
-    public boolean canProvidePower(IBlockState state) {
-        return true;
-    }
+	@Override
+	public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		EnumFacing powerDirection = side.getOpposite();
+		for (EnumFacing direction : EnumFacing.VALUES) {
+			if (direction != powerDirection) {
+				TileEntity auraTile = world.getTileEntity(pos.offset(direction));
 
-    @Override
-    public ArrayList<Object> getSpecialParameters() {
-        return null;
-    }
+				if (auraTile instanceof AuraTilePumpBase) {
+					return ((AuraTilePumpBase) auraTile).pumpPower > 0 ? 0 : 15;
+				}
+				if (auraTile instanceof ConsumerTile) {
+					return ((ConsumerTile) auraTile).validItemsNearby() ? 0 : 15;
+				}
+			}
+		}
+		return 0;
+	}
 
-    @Override
-    public String getBlockName() {
-        return "monitor";
-    }
+	/**
+	 * Can this block provide power. Only wire currently seems to have this change based on its state.
+	 */
 
-    @Override
-    public boolean shouldRegister() {
-        return true;
-    }
 
-    @Override
-    public boolean shouldDisplayInTab() {
-        return true;
-    }
+	@Override
+	public boolean canProvidePower(IBlockState state) {
+		return true;
+	}
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlock() {
-        return null;
-    }
+	@Override
+	public ArrayList<Object> getSpecialParameters() {
+		return null;
+	}
 
-    @Override
-    public Class<? extends TileEntity> getTileEntity() {
-        return null;
-    }
+	@Override
+	public String getBlockName() {
+		return "monitor";
+	}
 
-    @Override
-    public ThaumicTinkererRecipe getRecipeItem() {
-        return new CraftingBenchRecipe(new ItemStack(this), "RRR", "RAR", "RRR", 'R', new ItemStack(Items.REDSTONE), 'A', AuraBlock.getAuraNodeItemstack());
-    }
+	@Override
+	public boolean shouldRegister() {
+		return true;
+	}
 
-    @Override
-    public int getCreativeTabPriority() {
-        return 3;
-    }
+	@Override
+	public boolean shouldDisplayInTab() {
+		return true;
+	}
+
+	@Override
+	public Class<? extends ItemBlock> getItemBlock() {
+		return null;
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntity() {
+		return null;
+	}
+
+	@Override
+	public ThaumicTinkererRecipe getRecipeItem() {
+		return new CraftingBenchRecipe(new ItemStack(this), "RRR", "RAR", "RRR", 'R', new ItemStack(Items.REDSTONE), 'A', AuraBlock.getAuraNodeItemstack());
+	}
+
+	@Override
+	public int getCreativeTabPriority() {
+		return 3;
+	}
 }
