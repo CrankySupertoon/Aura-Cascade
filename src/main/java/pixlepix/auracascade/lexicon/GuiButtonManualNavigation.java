@@ -38,11 +38,11 @@ public class GuiButtonManualNavigation extends GuiButton {
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mx, int my) {
+	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
 		if (isVisible()) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(GuiLexicon.texture);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			this.hovered = mx >= this.xPosition && mx < (this.xPosition + this.width) && my >= this.yPosition && my < (this.yPosition + this.height);
+			this.hovered = mouseX >= this.x && mouseX < (this.x + this.width) && mouseY >= this.y && mouseY < (this.y + this.height);
 			GlStateManager.enableBlend();
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -50,8 +50,8 @@ public class GuiButtonManualNavigation extends GuiButton {
 			int v = 218 + (type == 0 ? 0 : type == 1 ? 10 : type == 2 ? (16 - height) : type == 3 ? 0 : 0);
 			if (hovered)
 				v += 20;
-			this.drawTexturedModalRect(this.xPosition, this.yPosition, u, v, width, height);
-			this.mouseDragged(mc, mx, my);
+			this.drawTexturedModalRect(this.x, this.y, u, v, width, height);
+			this.mouseDragged(mc, mouseX, mouseY);
 		}
 
 	}

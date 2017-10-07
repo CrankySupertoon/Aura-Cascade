@@ -45,7 +45,7 @@ public class GuiButtonCategory extends GuiButtonLexicon {
 
 	@Override
 	public void drawButton(Minecraft mc, int mx, int my) {
-		boolean inside = mx >= xPosition && my >= yPosition && mx < xPosition + width && my < yPosition + height;
+		boolean inside = mx >= x && my >= y && mx < x + width && my < y + height;
 		float time = 5F;
 		if (inside)
 			ticksHovered = Math.min(time, ticksHovered + gui.timeDelta);
@@ -80,7 +80,7 @@ public class GuiButtonCategory extends GuiButtonLexicon {
 			itemStack = category.getIcon();
 		}
 		GlStateManager.disableLighting();
-		Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(itemStack, xPosition, yPosition);
+		Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(itemStack, x, y);
 
 		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
