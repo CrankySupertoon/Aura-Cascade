@@ -58,7 +58,7 @@ public class GuiLexiconEntry extends GuiLexicon implements IGuiLexiconEntry, IPa
 		}
 
 		FontRenderer font = p_146285_1_.getItem().getFontRenderer(p_146285_1_);
-		drawHoveringText(list, p_146285_2_, p_146285_3_, (font == null ? fontRendererObj : font));
+		drawHoveringText(list, p_146285_2_, p_146285_3_, (font == null ? fontRenderer : font));
 	}
 
 	@Override

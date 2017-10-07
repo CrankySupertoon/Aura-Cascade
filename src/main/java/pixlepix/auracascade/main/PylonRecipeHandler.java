@@ -30,7 +30,7 @@ public class PylonRecipeHandler extends TemplateRecipeHandler {
             EnumFacing d = CraftingCenterTile.pedestalRelativeLocations.get(i);
             PylonRecipe recipeObj = ((NEIPylonRecipe) arecipes.get(recipe)).recipe;
             AuraQuantity quantity = recipeObj.componentList.get(i).auraQuantity;
-            Minecraft.getMinecraft().fontRendererObj.drawString("" + quantity.getNum() + "(" + (quantity.getType() == EnumAura.WHITE_AURA ? "Any" : quantity.getType().name) + ")", 52 + d.offsetX * 50, 76 + d.offsetZ * 35, quantity.getType().color.getHex());
+            Minecraft.getMinecraft().fontRenderer.drawString("" + quantity.getNum() + "(" + (quantity.getType() == EnumAura.WHITE_AURA ? "Any" : quantity.getType().name) + ")", 52 + d.offsetX * 50, 76 + d.offsetZ * 35, quantity.getType().color.getHex());
         }
     }
 

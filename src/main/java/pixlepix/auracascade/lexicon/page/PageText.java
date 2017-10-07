@@ -32,7 +32,7 @@ public class PageText extends LexiconPage {
 
 	@SideOnly(Side.CLIENT)
 	public static void renderText(int x, int y, int width, String unlocalizedText) {
-		FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
 		boolean unicode = renderer.getUnicodeFlag();
 		renderer.setUnicodeFlag(true);
 		String text = I18n.translateToLocal(unlocalizedText).replaceAll("&", "\u00a7");

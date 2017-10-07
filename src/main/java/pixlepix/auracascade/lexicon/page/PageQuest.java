@@ -37,7 +37,7 @@ public class PageQuest extends PageRecipe {
 		int yPosTop = gui.getTop() + 39;
 		int yPosBot = gui.getTop() + 97;
 
-		FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
 		renderer.drawString("Goal: ", xPos, yPosTop, 0);
 		renderer.drawString("Reward: ", xPos, yPosBot, 0);
 

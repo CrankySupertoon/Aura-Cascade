@@ -30,9 +30,9 @@ public class OverlayRender {
 				Block block = world.getBlockState(movingobjectposition.getBlockPos()).getBlock();
 
 				ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
-				int centerX = (resolution.getScaledWidth() - Minecraft.getMinecraft().fontRendererObj.getStringWidth("hi")) / 2;
+				int centerX = (resolution.getScaledWidth() - Minecraft.getMinecraft().fontRenderer.getStringWidth("hi")) / 2;
 
-				int centerY = (resolution.getScaledHeight() - Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT) / 2;
+				int centerY = (resolution.getScaledHeight() - Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT) / 2;
 				if (block instanceof IToolTip) {
 					IToolTip toolTip = (IToolTip) block;
 					VazkiiRenderHelper.renderTooltip(centerX, centerY, toolTip.getTooltipData(world, player, movingobjectposition.getBlockPos()), 0x5577ff, 0x505000ff);

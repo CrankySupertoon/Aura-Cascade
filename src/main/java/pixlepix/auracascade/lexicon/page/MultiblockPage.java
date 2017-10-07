@@ -115,7 +115,7 @@ public class MultiblockPage extends PageText {
 			GlStateManager.enableBlend();
 			GlStateManager.enableDepth();
 
-			Minecraft.getMinecraft().fontRendererObj.setUnicodeFlag(false);
+			Minecraft.getMinecraft().fontRenderer.setUnicodeFlag(false);
 			if (highlighted != null) {
 				gui.renderToolTip(highlighted, mx, my);
 			}

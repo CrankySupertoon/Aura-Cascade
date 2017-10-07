@@ -24,10 +24,10 @@ public class GuiButtonInvisible extends GuiButtonLexicon {
 		hovered = par2 >= xPosition && par3 >= yPosition && par2 < xPosition + width && par3 < yPosition + height;
 		int k = getHoverState(hovered);
 
-		boolean unicode = par1Minecraft.fontRendererObj.getUnicodeFlag();
-		par1Minecraft.fontRendererObj.setUnicodeFlag(true);
-		par1Minecraft.fontRendererObj.drawString(displayString, xPosition + (k == 2 ? 5 : 0), yPosition + (height - 8) / 2, 0);
-		par1Minecraft.fontRendererObj.setUnicodeFlag(unicode);
+		boolean unicode = par1Minecraft.fontRenderer.getUnicodeFlag();
+		par1Minecraft.fontRenderer.setUnicodeFlag(true);
+		par1Minecraft.fontRenderer.drawString(displayString, xPosition + (k == 2 ? 5 : 0), yPosition + (height - 8) / 2, 0);
+		par1Minecraft.fontRenderer.setUnicodeFlag(unicode);
 	}
 
 }

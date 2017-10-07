@@ -77,7 +77,7 @@ public class GuiLexiconIndex extends GuiLexicon implements IParented {
 		buttonList.add(leftButton = new GuiButtonPage(13, left, top + guiHeight - 10, false));
 		buttonList.add(rightButton = new GuiButtonPage(14, left + guiWidth - 18, top + guiHeight - 10, true));
 
-		searchField = new GuiTextField(15, fontRendererObj, left + guiWidth / 2 + 28, top + guiHeight + 6, 200, 10);
+		searchField = new GuiTextField(15, fontRenderer, left + guiWidth / 2 + 28, top + guiHeight + 6, 200, 10);
 		searchField.setCanLoseFocus(false);
 		searchField.setFocused(true);
 		searchField.setEnableBackgroundDrawing(false);
