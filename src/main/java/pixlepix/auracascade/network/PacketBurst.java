@@ -76,10 +76,10 @@ public class PacketBurst implements IMessage, IMessageHandler<PacketBurst, IMess
 						int density = (int) (5D);
 						for (int count = 0; count < dist * density; count++) {
 							double i = ((double) count) / density;
-							double xp = msg.from.getX() + (velocity.xCoord * i) + .5;
-							double yp = msg.from.getY() + (velocity.yCoord * i) + .5;
-							double zp = msg.from.getZ() + (velocity.zCoord * i) + .5;
-							ParticleEffects.spawnParticle(msg.particle, xp, yp, zp, velocity.xCoord * .1, .15, velocity.zCoord * .1, msg.r, msg.g, msg.b);
+							double xp = msg.from.getX() + (velocity.x * i) + .5;
+							double yp = msg.from.getY() + (velocity.y * i) + .5;
+							double zp = msg.from.getZ() + (velocity.z * i) + .5;
+							ParticleEffects.spawnParticle(msg.particle, xp, yp, zp, velocity.x * .1, .15, velocity.z * .1, msg.r, msg.g, msg.b);
 						}
 
 					}

@@ -118,7 +118,7 @@ public class EventHandler {
 		List<Block> affectedBlocks = Arrays.asList(Blocks.GRASS, Blocks.SANDSTONE, Blocks.STONE, Blocks.SAND, Blocks.DIRT, Blocks.COBBLESTONE, Blocks.GRAVEL);
 		if (!event.getWorld().isRemote) {
 			Explosion explosion = event.getExplosion();
-			AxisAlignedBB axisAlignedBB = new AxisAlignedBB(explosion.getPosition().xCoord - 3, explosion.getPosition().yCoord - 3, explosion.getPosition().zCoord - 3, explosion.getPosition().xCoord + 3, explosion.getPosition().yCoord + 3, explosion.getPosition().zCoord + 3);
+			AxisAlignedBB axisAlignedBB = new AxisAlignedBB(explosion.getPosition().x - 3, explosion.getPosition().y - 3, explosion.getPosition().z - 3, explosion.getPosition().x + 3, explosion.getPosition().y + 3, explosion.getPosition().z + 3);
 			List<EntityPlayer> players = event.getWorld().getEntitiesWithinAABB(EntityPlayer.class, axisAlignedBB);
 			for (EntityPlayer player : players) {
 				if (getBaubleFromInv(ItemExplosionRing.class, player) != null) {

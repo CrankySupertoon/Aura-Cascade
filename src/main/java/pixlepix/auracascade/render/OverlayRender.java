@@ -24,7 +24,7 @@ public class OverlayRender {
 			EntityPlayer player = AuraCascade.proxy.getPlayer();
 			Vec3d vec3 = player.getPositionEyes(1.0F);
 			Vec3d vec3a = player.getLook(1.0F);
-			Vec3d vec3b = vec3.addVector(vec3a.xCoord * 3, vec3a.yCoord * 3, vec3a.zCoord * 3);
+			Vec3d vec3b = vec3.addVector(vec3a.x * 3, vec3a.y * 3, vec3a.z * 3);
 			RayTraceResult movingobjectposition = world.rayTraceBlocks(vec3, vec3b);
 			if (movingobjectposition != null && movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
 				Block block = world.getBlockState(movingobjectposition.getBlockPos()).getBlock();

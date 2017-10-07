@@ -230,7 +230,7 @@ public class BlockExplosionContainer extends Block implements ITTinkererBlock {
 	 * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
 	 */
 	@Override
-	public boolean isFullyOpaque(IBlockState state) {
+	public boolean isTopSolid(IBlockState state) {
 		return type == null || !type.equals("Glass");
 	}
 

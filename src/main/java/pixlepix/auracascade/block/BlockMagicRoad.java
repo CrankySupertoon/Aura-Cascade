@@ -48,7 +48,7 @@ public class BlockMagicRoad extends Block implements ITTinkererBlock {
 		Vec3d dir = new Vec3d(entity.motionX, entity.motionY, entity.motionZ);
 		if (dir.lengthVector() > 0.25) {
 			dir = dir.normalize();
-			entity.addVelocity(dir.xCoord * 5, dir.yCoord * 5, dir.zCoord * 5);
+			entity.addVelocity(dir.x * 5, dir.y * 5, dir.z * 5);
 		}
 	}
 
@@ -58,7 +58,7 @@ public class BlockMagicRoad extends Block implements ITTinkererBlock {
 	}
 
 	@Override
-	public boolean isFullyOpaque(IBlockState state) {
+	public boolean isTopSolid(IBlockState state) {
 		return false;
 	}
 
