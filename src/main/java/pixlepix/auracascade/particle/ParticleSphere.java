@@ -3,7 +3,7 @@ package pixlepix.auracascade.particle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +36,7 @@ public class ParticleSphere extends Particle {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void renderParticle(VertexBuffer wr, Entity e, float par2, float par3, float par4, float par5, float par6, float par7) {
+	public void renderParticle(BufferBuilder wr, Entity e, float par2, float par3, float par4, float par5, float par6, float par7) {
 		// todo 1.8.8 verify
 		Tessellator.getInstance().draw();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("aura:textures/particles/particleFire.png"));
